@@ -1,0 +1,12 @@
+**/.claude/
+**/.claudemem/
+**/.claude-context/
+**/.serena/
+**/.cursor/
+**/.cursorignore
+**/.mcp.json
+**/agent-os/
+**/CLAUDE.md
+**/.private-journal/
+**/AGENTS.md/
+

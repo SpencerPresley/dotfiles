@@ -1,0 +1,19 @@
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 13.5
+font-shaping-break = cursor
+theme = dark:Catppuccin Mocha,light:Catppuccin Mocha
+cursor-style = block
+cursor-style-blink = true
+shell-integration-features = no-cursor,sudo,ssh-env,ssh-terminfo
+mouse-hide-while-typing = true
+window-title-font-family = JetBrainsMonoNL Nerd Font Mono
+macos-option-as-alt = left
+auto-update = check
+window-padding-x = 4
+window-padding-y = 4
+copy-on-select = true
+window-inherit-working-directory = true
+window-inherit-font-size = true
+keybind = shift+enter=text:\x1b\r
+background-opacity = .9
+background-blur = 20

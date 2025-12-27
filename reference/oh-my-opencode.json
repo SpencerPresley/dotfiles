@@ -1,0 +1,31 @@
+{
+  "agents": {
+    "OmO": {
+      "model": "anthropic/claude-opus-4-5"
+    },
+    "oracle": {
+      "model": "openai/gpt-4.2"
+    },
+    "explore": {
+      "model": "anthropic/claude-haiku-4-5"
+    },
+    "librarian": {
+      "model": "anthropic/claude-haiku-4-5"
+    },
+    "document-writer": {
+      "model": "anthropic/claude-opus-4-5"
+    },
+    "frontend-ui-ux-engineer": {
+      "model": "anthropic/claude-opus-4-5"
+    },
+    "multimodal-looker": {
+      "model": "anthropic/claude-opus-4-5"
+    }
+  },
+  "plugin_paths": {
+    "commands": ["~/.claude/plugins/cache/**/commands"],
+    "skills": ["~/.claude/plugins/cache/**/skills"],
+    "agents": ["~/.claude/plugins/cache/**/agents"],
+    "mcp": ["~/.claude/plugins/cache/**/.mcp.json"]
+  }
+}

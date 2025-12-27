@@ -1,0 +1,454 @@
+{
+  "window.density.editorTabHeight": "compact",
+
+  // EDITOR
+  "editor.folding": false,
+  "editor.glyphMargin": false,
+  "editor.smoothScrolling": true, // true for now, consider going to false if it's bad
+  "editor.roundedSelection": true,
+  "editor.lineHeight": 0, // leave 0 for now, 1.3 was previous setting, consdier that if needed
+  "editor.cursorSmoothCaretAnimation": "off", // distracting when on
+  "editor.scrollbar.horizontalScrollbarSize": 6,
+  "editor.scrollbar.verticalScrollbarSize": 0,
+  // "editor.scrollbar.horizontal": "hidden",
+  // "editor.scrollbar.vertical": "hidden",
+  // "editor.scrollbar.vertical": "hidden",
+  "editor.minimap.enabled": false,
+  "editor.lineNumbers": "relative",
+
+  "editor.guides.indentation": false,
+  "editor.guides.highlightActiveIndentation": false,
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.fontVariations": true,
+  "editor.renderWhitespace": "none",
+  // "editor.rulers": [100], // renders vertical line after 100 characters like in nvim
+  // editor cursor
+  "editor.cursorBlinking": "phase",
+  "editor.cursorStyle": "block",
+  // editor codelens
+  "editor.codeLensFontFamily": "MesloLGS NF",
+  "editor.tabSize": 4,
+  // WORKBENCH
+  "workbench.statusBar.visible": true,
+  "editor.semanticHighlighting.enabled": "configuredByTheme",
+
+  // Status bar - hide everything except Cursor Tab and neovim
+  "scm.statusBar.enabled": false,
+  "gitlens.statusBar.enabled": false,
+  "gitlens.currentLine.enabled": false,
+  "errorLens.statusBarIconsEnabled": false,
+  "errorLens.statusBarMessageEnabled": false,
+  "prettier.statusBar": "never",
+  "python.interpreter.infoVisibility": "never",
+  "remote.autoForwardPorts": false,
+  "json.schemaDownload.enable": false,
+  "workbench.editor.showTabs": "multiple",
+  "problems.showCurrentInStatus": false,
+  "workbench.tree.renderIndentGuides": "none",
+  "workbench.editor.editorActionsLocation": "hidden",
+  "workbench.editor.tabSizing": "fit",
+  "workbench.tips.enabled": false,
+  "workbench.tree.enableStickyScroll": false,
+  "workbench.tree.indent": 20,
+  "workbench.editor.tabSizingFixedMaxWidth": 150,
+
+  // EXPLORER
+  "explorer.decorations.colors": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+    "*.sqlite": "${capture}.${extname}-*",
+    "*.db": "${capture}.${extname}-*",
+    "*.sqlite3": "${capture}.${extname}-*",
+    "*.db3": "${capture}.${extname}-*",
+    "*.sdb": "${capture}.${extname}-*",
+    "*.s3db": "${capture}.${extname}-*"
+  },
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+  // FILES
+  // associations
+  "files.associations": {
+    ".env.jenkins": "dotenv"
+  },
+  // other file settings
+  "files.enableTrash": false,
+  // "files.autoSave": "afterDelay",
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true, // they're useless and take up space
+  "zenMode.showTabs": "none",
+  "json.format.keepLines": true,
+  "terminal.external.osxExec": "Ghostty.app",
+  "github.gitProtocol": "ssh",
+
+  // LANGUAGE SPECIFIC
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  /******************************************************
+   *                      FONTS                          *
+   *-----------------------------------------------------*
+   * Options:                                            *
+   *   • FiraCode Nerd Font                              *
+   *   • FiraCode Nerd Font Mono                         *
+   *   • FiraCode Nerd Font Propo                        *
+   *   • JetBrainsMono Nerd Font                         *
+   *   • JetBrainsMono Nerd Font Mono                    *
+   *   • JetBrainsMono Nerd Font Propo                   *
+   *   • JetBrainsMonoNL Nerd Font                       *
+   *   • JetBrainsMonoNL Nerd Font Mono                  *
+   *   • JetBrainsMonoNL Nerd Font Propo                 *
+   *   • MesloLGS NF                                     *
+   *   • Monaspace Argon                                 *
+   *   • Monaspace Krypton                               *
+   *   • Monaspace Neon                                  *
+   *   • Monaspace Radon                                 *
+   *   • Monaspace Xenon                                 *
+   *******************************************************
+   * Font Ligature Settings:                             *
+   *  - When using a Monaspace font, must set them.      *
+   *      See: https://github.com/githubnext/monaspace   *
+   *                                                     *
+   *  - When using a 'NL' font (e.g. JetBrainsMonoNL),   *
+   *    set: "editor.fontLigatures": false               *
+   *                                                     *
+   *  - When using any other font, set:                  *
+   *      "editor.fontLigatures": true                   *
+   *******************************************************
+   * Terminal Font Settings:                             *
+   *  - Use a Nerd Font for proper glyph rendering       *
+   *    (shell prompts, icons, powerline symbols)        *
+   *                                                     *
+   *  - Available Nerd Fonts:                            *
+   *      • FiraCode Nerd Font                           *
+   *      • FiraCode Nerd Font Mono                      *
+   *      • FiraCode Nerd Font Propo                     *
+   *      • JetBrainsMono Nerd Font                      *
+   *      • JetBrainsMono Nerd Font Mono                 *
+   *      • JetBrainsMono Nerd Font Propo                *
+   *      • JetBrainsMonoNL Nerd Font                    *
+   *      • JetBrainsMonoNL Nerd Font Mono               *
+   *      • JetBrainsMonoNL Nerd Font Propo              *
+   *      • MesloLGS NF                                  *
+   *                                                     *
+   *  - Note: Monaspace fonts lack Nerd Font glyphs      *
+   *******************************************************/
+  // "editor.fontFamily": "JetBrainsMono Nerd Font",
+  // "editor.inlineSuggest.fontFamily": "'Monaspace Krypton', monaspace",
+  "editor.fontFamily": "Maple Mono NF, VictorMono Nerd Font, FiraCode Nerd Font, monaspace, monospace",
+  "editor.fontLigatures": true,
+  // specifically for maple mono
+  "editor.fontWeight": "500",
+  // "terminal.integrated.fontFamily": "MesloLGS NF",
+  "cursor.composer.usageSummaryDisplay": "always",
+  "cursor.cpp.enablePartialAccepts": true,
+  "update.releaseTrack": "prerelease",
+  "gitlens.ai.model": "openai:o3-pro",
+  "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
+
+  // EXTENSIONS
+
+  // START: Error Lens
+  // Core settings
+  "errorLens.enabled": true,
+  "errorLens.enabledDiagnosticLevels": ["error", "warning", "info"],
+
+  // Inline message styling
+  "errorLens.messageEnabled": true,
+  "errorLens.messageBackgroundMode": "message",
+  "errorLens.fontStyleItalic": true,
+  "errorLens.margin": "6ch",
+  "errorLens.padding": "0 0.5ch",
+  "errorLens.borderRadius": "3px",
+  "errorLens.messageMaxChars": 120,
+
+  // Message template - clean without emojis
+  "errorLens.messageTemplate": "$message ($source)",
+  "errorLens.severityText": ["ERROR", "WARN", "INFO", "HINT"],
+
+  // Follow cursor for less visual noise
+  "errorLens.followCursor": "closestProblem",
+  "errorLens.followCursorMore": 2,
+
+  // Gutter icons - subtle indicators
+  "errorLens.gutterIconsEnabled": true,
+  "errorLens.gutterIconsFollowCursorOverride": true,
+  "errorLens.gutterIconSet": "circle",
+  "errorLens.gutterIconSize": "70%",
+
+  // Status bar - disabled (configured globally above)
+  // "errorLens.statusBarIconsEnabled": true,
+  // "errorLens.statusBarIconsUseBackground": false,
+  // "errorLens.statusBarIconsAtZero": "hide",
+  // "errorLens.statusBarMessageEnabled": false,
+
+  // Performance
+  "errorLens.delay": 500,
+  "errorLens.delayMode": "debounce",
+  "errorLens.scrollbarHackEnabled": true,
+
+  // Behavior
+  "errorLens.removeLinebreaks": true,
+  "errorLens.enableOnDiffView": false,
+  "errorLens.problemRangeDecorationEnabled": true,
+  // END: Error Lens
+
+  // START: Ruff
+  "ruff.enable": true,
+  "ruff.nativeServer": "on",
+  "ruff.importStrategy": "fromEnvironment",
+  "ruff.configurationPreference": "filesystemFirst",
+  "ruff.fixAll": true,
+  "ruff.organizeImports": true,
+  "ruff.codeAction.fixViolation": { "enable": true },
+  "ruff.codeAction.disableRuleComment": { "enable": true },
+  "ruff.showSyntaxErrors": true,
+  // END: Ruff
+
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+
+  // START: Prettier
+  "prettier.enable": true,
+  "prettier.requireConfig": false,
+  "prettier.useEditorConfig": true,
+
+  // Formatting options (can be overridden by .prettierrc)
+  "prettier.printWidth": 100,
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.bracketSpacing": true,
+  "prettier.bracketSameLine": false,
+  "prettier.arrowParens": "always",
+  "prettier.endOfLine": "lf",
+  "prettier.proseWrap": "preserve",
+  // END: Prettier
+
+  // Language-specific format on save with Prettier
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.autoSave": "off"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.autoSave": "off"
+  },
+  "[html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[graphql]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // START: ms python
+  "python.venvFolders": [".venv", "venv"],
+  "python.defaultInterpreterPath": "python3",
+  "python.createEnvironment.trigger": "off",
+  "python.experiments.enabled": false, // fuck your telemetry
+  "python.experiments.optOutFrom": ["All"], // again, fuck your telemetry
+  "python.languageServer": "None",
+  // "python.analysis.languageServerMode": "full", // light, default, or full
+  // "python.analysis.indexing": true, // indexes libraries for better completions, flase = less ram
+  // "python.analysis.autoFormatStrings": true, // if it sees { in a string it auto adds f to the front
+  // "python.analysis.supportRestructuredText": false, // don't use restructured doc string format
+
+  "gitlens.telemetry.enabled": false, // and one more time :)
+
+  // Workbench Color Customization
+  "workbench.colorCustomizations": {
+    "statusBar.foreground": "#00ff00",
+    "statusBarItem.hoverBackground": "#313244",
+    "errorLens.errorBackground": "#e4545410",
+    "errorLens.warningBackground": "#ff942f10",
+    "errorLens.infoBackground": "#00b7e410",
+    "errorLens.errorMessageBackground": "#e4545430",
+    "errorLens.warningMessageBackground": "#ff942f30",
+    "errorLens.infoMessageBackground": "#00b7e430"
+  },
+
+  // Go fuck yourself with your telemetry bullshit
+  "crashReporting.enabled": "off",
+  "telemetry.enableTelemetry": false,
+  "telemetry.feedback.enabled": false,
+  "telemetry.enableCrashReporter": false,
+  "workbench.enableExperiments": false,
+
+  // Disabling annoying security features
+  // "security.workspace.trust.enabled": true,
+
+  // Accessibility
+  // "accessibility.dimUnfocused.enabled": true,
+  // "accessibility.dimUnfocused.opacity": 0.95,
+
+  // For vscode-neovim performance
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+
+  // vscode-neovim configuration
+  "vscode-neovim.neovimExecutablePaths.darwin": "/opt/homebrew/bin/nvim",
+
+  "vscode-neovim.compositeKeys": {
+    "jk": {
+      "command": "vscode-neovim.escape"
+    }
+  },
+
+  "vscode-neovim.ctrlKeysForNormalMode": [
+    "a",
+    "b",
+    "d",
+    "e",
+    "f",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "o",
+    "r",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "/",
+    "]",
+    "right",
+    "left",
+    "up",
+    "down"
+  ],
+
+  "vscode-neovim.ctrlKeysForInsertMode": ["a", "h", "j", "m", "o", "r", "t", "u", "w"],
+  "cursor.cpp.disabledLanguages": ["plaintext"],
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.iconTheme": "catppuccin-mocha",
+  "catppuccin-icons.hidesExplorerArrows": true,
+
+  // Catppuccin Specific Theme Settings
+  // "catppuccin-icons.hidesExplorerArrows": true,
+  "catppuccin.extraBordersEnabled": true,
+  "editor.fontSize": 13,
+
+  // Get rid of that ignoring ass 'tRuSt ThIS pUblISher' message
+  "extensions.verifySignature": false,
+  "redhat.telemetry.enabled": false,
+  "terminal.integrated.suggest.cdPath": "off",
+  "terminal.integrated.suggest.inlineSuggestion": "off",
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+  "files.autoSave": "afterDelay",
+  "cursor.general.globalCursorIgnoreList": [
+    "**/.env",
+    "**/.env.*",
+    "**/credentials.json",
+    "**/credentials.*.json",
+    "**/secret.json",
+    "**/secrets.json",
+    "**/*.key",
+    "**/*.pem",
+    "**/*.pfx",
+    "**/*.p12",
+    "**/*.crt",
+    "**/*.cer",
+    "**/id_rsa",
+    "**/id_dsa",
+    "**/.ssh/id_*",
+    "**/.cursor/mcp.json",
+    "!**/.env.example"
+  ],
+  "docker.extension.enableComposeLanguageServer": false,
+  "docker.extension.dockerEngineAvailabilityPrompt": false,
+  "terminal.integrated.fontSize": 10,
+  "claudeCode.initialPermissionMode": "acceptEdits",
+  "claudeCode.respectGitIgnore": false,
+  "evenBetterToml.formatter.alignComments": true,
+  "evenBetterToml.formatter.alignEntries": true,
+  "evenBetterToml.formatter.arrayAutoExpand": true,
+  "evenBetterToml.formatter.arrayTrailingComma": true,
+  "evenBetterToml.formatter.compactEntries": true,
+  "evenBetterToml.formatter.reorderArrays": true,
+  "evenBetterToml.formatter.trailingNewline": true,
+  "evenBetterToml.formatter.reorderKeys": true,
+  "evenBetterToml.formatter.reorderInlineTables": true,
+  "evenBetterToml.schema.associations": {
+    "pyproject.toml": "https://json.schemastore.org/pyproject.json"
+  },
+  "evenBetterToml.rules": [],
+  "cursorpyright.analysis.inlayHints.callArgumentNames": true,
+  "ruff.lineLength": 100,
+  "claudeCode.selectedModel": "default",
+  "workbench.navigationControl.enabled": false,
+  "workbench.layoutControl.enabled": false,
+  "window.commandCenter": true,
+  "makefile.configureOnOpen": true,
+  "markdown.extension.toc.levels": "2..6",
+  "claudeCode.preferredLocation": "sidebar",
+  "markdown.extension.print.theme": "dark",
+  "markdown-preview-enhanced.codeBlockTheme": "github-dark.css",
+  "markdown-preview-enhanced.mermaidTheme": "dark",
+  "markdown-preview-enhanced.previewColorScheme": "editorColorScheme",
+  "markdown.extension.toc.omittedFromToc": {
+    "README.md": ["## Table of Contents", "## ToC"]
+  },
+  "workbench.externalBrowser": "chrome"
+}

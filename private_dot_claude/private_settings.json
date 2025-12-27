@@ -1,0 +1,48 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); user=$(whoami); host=$(hostname -s); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); model=$(echo \"$input\" | jq -r '.model.display_name'); style=$(echo \"$input\" | jq -r '.output_style.name'); display_cwd=\"${cwd/#$HOME/~}\"; if [ -d \"$cwd/.git\" ] || git -C \"$cwd\" rev-parse --git-dir > /dev/null 2>&1; then cd \"$cwd\" 2>/dev/null; git_branch=$(git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null); if [ -n \"$git_branch\" ]; then git_status=$(git -c core.useBuiltinFSMonitor=false status --porcelain 2>/dev/null); modified=$(echo \"$git_status\" | grep -c '^ M' 2>/dev/null || echo 0); untracked=$(echo \"$git_status\" | grep -c '^??' 2>/dev/null || echo 0); staged=$(echo \"$git_status\" | grep -c '^[MARC]' 2>/dev/null || echo 0); git_indicators=\"\"; [ \"$staged\" -gt 0 ] && git_indicators=\"${git_indicators}+\"; [ \"$modified\" -gt 0 ] && git_indicators=\"${git_indicators}!\"; [ \"$untracked\" -gt 0 ] && git_indicators=\"${git_indicators}?\"; if [ -n \"$git_indicators\" ]; then git_info=\" $(printf '\\033[35m')($git_branch $(printf '\\033[33m')$git_indicators$(printf '\\033[35m'))$(printf '\\033[0m')\"; else git_info=\" $(printf '\\033[35m')($git_branch)$(printf '\\033[0m')\"; fi; else git_info=\"\"; fi; else git_info=\"\"; fi; printf \"$(printf '\\033[32m')%s@%s$(printf '\\033[0m'):$(printf '\\033[34m')%s$(printf '\\033[0m')%s $(printf '\\033[33m')[%s]$(printf '\\033[0m') $(printf '\\033[36m')%s$(printf '\\033[0m')\" \"$user\" \"$host\" \"$display_cwd\" \"$git_info\" \"$model\" \"$style\""
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "double-shot-latte@superpowers-marketplace": true,
+    "context7@claude-plugins-official": true,
+    "code-documentation@claude-code-workflows": true,
+    "frontend-design@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "chroma@ai-research-skills": false,
+    "faiss@ai-research-skills": false,
+    "langsmith-observability@ai-research-skills": false,
+    "claude-mem@thedotmack": false,
+    "ralph-wiggum@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
+    "mag-claude-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "MadAppGang/claude-code"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "installedPluginVersions": {
+    "agentdev@mag-claude-plugins": "1.1.0",
+    "orchestration@mag-claude-plugins": "0.5.0"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
+}

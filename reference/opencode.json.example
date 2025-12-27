@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["oh-my-opencode", "@tarquinen/opencode-dcp@latest"],
+  "mcp": {
+    "docs-langchain": {
+      "type": "remote",
+      "url": "https://docs.langchain.com/mcp",
+      "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": ""
+      },
+      "enabled": true
+    },
+    "hf-mcp-server": {
+      "type": "remote",
+      "url": "https://huggingface.co/mcp?login",
+      "enabled": true
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "environment": {},
+      "enabled": true
+    }
+  }
+}

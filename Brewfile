@@ -49,7 +49,7 @@ brew "redis"
 # Terminal
 brew "tmux"
 brew "sesh"
-brew "ueberzugpp"
+brew "jstkdng/programs/ueberzugpp"
 brew "viu"
 
 # Misc

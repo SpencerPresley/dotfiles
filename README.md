@@ -39,7 +39,7 @@ ssh -T git@github.com  # Verify it works
 #    (Optional: Add your SSH key to 1Password for future machines)
 
 # 5. Install Oh My Zsh FIRST (before chezmoi, so it doesn't conflict)
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # 6. Apply dotfiles (this also runs run_once_install.sh automatically)
 chezmoi init --apply git@github.com:spencerpresley/dotfiles.git

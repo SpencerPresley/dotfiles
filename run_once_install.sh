@@ -5,12 +5,6 @@ set -e
 
 echo "=== Installing dependencies ==="
 
-# Oh My Zsh (check for oh-my-zsh.sh, not just directory - chezmoi may create custom/ first)
-if [ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]; then
-    echo "Installing Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
-fi
-
 # Powerlevel10k
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     echo "Installing Powerlevel10k..."

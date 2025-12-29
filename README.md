@@ -10,10 +10,11 @@ Personal dotfiles managed with chezmoi + 1Password.
 2. Install essentials (chezmoi, git, 1password, 1password-cli)
 3. Setup SSH for GitHub
 4. Setup 1password (Integrate with 1Password CLI and SSH Agent)
-5. Apply dot files (this also runs run_once_install.sh automatically)
-6. Install brew packages (then check for any post-install caveats)
-7. Restart terminal, then install tmux plugins
-8. App setups (Cursor, Claude Desktop, etc.)
+5. Install Oh My Zsh (must be before chezmoi)
+6. Apply dotfiles (chezmoi init --apply)
+7. Install brew packages (then check for any post-install caveats)
+8. Restart terminal, then install tmux plugins
+9. App setups (Cursor, Claude Desktop, etc.)
 
 **Detailed Steps:**
 
@@ -37,24 +38,27 @@ ssh -T git@github.com  # Verify it works
 #    Settings → Developer → Enable "SSH Agent"
 #    (Optional: Add your SSH key to 1Password for future machines)
 
-# 5. Apply dotfiles (this also runs run_once_install.sh automatically)
+# 5. Install Oh My Zsh FIRST (before chezmoi, so it doesn't conflict)
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# 6. Apply dotfiles (this also runs run_once_install.sh automatically)
 chezmoi init --apply git@github.com:spencerpresley/dotfiles.git
 
-# 6. Install brew packages
+# 7. Install brew packages
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
 
-# 7. Check for any post-install caveats
+# 8. Check for any post-install caveats
 brew info $(brew leaves) 2>/dev/null | grep -B 2 -A 5 "Caveats"
 
-# 8. Restart terminal, then install tmux plugins
+# 9. Restart terminal, then install tmux plugins
 tmux
 # Press: Ctrl+a then Shift+i to install plugins
 
-# 9. Cursor setup
+# 10. Cursor setup
 cp "$HOME/.local/share/chezmoi/reference/cursor-settings.json" "$HOME/Library/Application Support/Cursor/User/settings.json"
 cat "$HOME/.local/share/chezmoi/reference/cursor-extensions.txt" | xargs -I {} cursor --install-extension {}
 
-# 10. Claude Desktop setup
+# 11. Claude Desktop setup
 cp "$HOME/.local/share/chezmoi/reference/claude-desktop-config.json" "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 ```
 

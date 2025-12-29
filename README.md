@@ -28,7 +28,7 @@ brew install chezmoi git
 brew install --cask 1password 1password-cli
 
 # 3. Setup SSH for GitHub (first time only)
-ssh-keygen -t ed25519 -C "spencerpresley96l@gmail.com"
+ssh-keygen -t ed25519 -C "spencerpresley96@gmail.com"
 cat "$HOME/.ssh/id_ed25519.pub"  # Add to GitHub → Settings → SSH Keys
 ssh -T git@github.com  # Verify it works
 
@@ -38,7 +38,7 @@ ssh -T git@github.com  # Verify it works
 #    (Optional: Add your SSH key to 1Password for future machines)
 
 # 5. Apply dotfiles (this also runs run_once_install.sh automatically)
-chezmoi init --apply spencerpresley/dotfiles
+chezmoi init --apply git@github.com:spencerpresley/dotfiles.git
 
 # 6. Install brew packages
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"

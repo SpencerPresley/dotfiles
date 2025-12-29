@@ -1,6 +1,12 @@
 # Core tools
 brew "bat"
 brew "chezmoi"
+brew "coreutils"
+brew "findutils"
+brew "git"
+brew "gnu-sed"
+brew "gawk"
+brew "moreutils"
 brew "fd"
 brew "fzf"
 brew "gh"
@@ -13,7 +19,6 @@ brew "zoxide"
 
 # Dev
 brew "cmake"
-brew "go"
 brew "gopls"
 brew "neovim"
 brew "nvm"
@@ -57,7 +62,6 @@ brew "wireshark"
 # Casks
 cask "1password"
 cask "1password-cli"
-cask "alt-tab"
 cask "betterdisplay"
 cask "chatgpt"
 cask "claude"

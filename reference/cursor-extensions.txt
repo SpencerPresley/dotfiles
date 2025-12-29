@@ -22,7 +22,6 @@ esbenp.prettier-vscode
 eserozvataf.one-dark-pro-monokai-darker
 fosshaas.fontsize-shortcuts
 github.github-vscode-theme
-golang.go
 jdinhlife.gruvbox
 jock.svg
 mermaidchart.vscode-mermaid-chart

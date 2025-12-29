@@ -27,8 +27,8 @@ serena-init-project() {
 autoload -Uz add-zsh-hook
 
 _ac_agents_claude_alias() {
-    if [[ "$PWD" == "/Users/spencerpresley/work/ac-agents"* ]]; then
-        alias claude='claude --append-system-prompt "$(cat /Users/spencerpresley/work/ac-agents/research/prompts/.claude-system-prompt.txt)"'
+    if [[ "$PWD" == "$HOME/work/ac-agents"* ]]; then
+        alias claude='claude --append-system-prompt "$(cat $HOME/work/ac-agents/research/prompts/.claude-system-prompt.txt)"'
     else
         unalias claude 2>/dev/null
     fi

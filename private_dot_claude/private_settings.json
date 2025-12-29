@@ -1,4 +1,8 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "defaultMode": "acceptEdits"
   },
@@ -10,14 +14,14 @@
     "superpowers@superpowers-marketplace": true,
     "double-shot-latte@superpowers-marketplace": true,
     "context7@claude-plugins-official": true,
-    "code-documentation@claude-code-workflows": true,
-    "frontend-design@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
+    "code-documentation@claude-code-workflows": false,
+    "frontend-design@claude-plugins-official": false,
+    "plugin-dev@claude-plugins-official": false,
     "chroma@ai-research-skills": false,
     "faiss@ai-research-skills": false,
     "langsmith-observability@ai-research-skills": false,
     "claude-mem@thedotmack": false,
-    "ralph-wiggum@claude-plugins-official": true,
+    "ralph-wiggum@claude-plugins-official": false,
     "feature-dev@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
@@ -40,9 +44,5 @@
   "installedPluginVersions": {
     "agentdev@mag-claude-plugins": "1.1.0",
     "orchestration@mag-claude-plugins": "0.5.0"
-  },
-  "attribution": {
-    "commit": "",
-    "pr": ""
   }
 }

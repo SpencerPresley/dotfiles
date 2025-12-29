@@ -32,7 +32,7 @@ fi
 # TPM (Tmux Plugin Manager)
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     echo "Installing TPM..."
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 fi
 
 # Bun
@@ -53,6 +53,13 @@ if ! command -v uv &> /dev/null; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 
+# Docker compose CLI plugin (for 'docker compose' command)
+if [ ! -L "$HOME/.docker/cli-plugins/docker-compose" ]; then
+    echo "Setting up docker compose CLI plugin..."
+    mkdir -p "$HOME/.docker/cli-plugins"
+    ln -sfn /opt/homebrew/bin/docker-compose "$HOME/.docker/cli-plugins/docker-compose"
+fi
+
 echo "=== Done! ==="
-echo "Run 'source ~/.zshrc' to reload shell"
+echo "Run 'source \$HOME/.zshrc' to reload shell"
 echo "Run 'tmux' then 'prefix + I' to install tmux plugins"

@@ -49,7 +49,7 @@ chezmoi init --apply spencerpresley/dotfiles
 
 # Install all brew packages
 echo "Installing brew packages..."
-brew bundle --file=~/.local/share/chezmoi/Brewfile
+brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
 
 # Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -77,7 +77,7 @@ fi
 # TPM
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     echo "Installing TPM..."
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 fi
 
 # Bun
@@ -102,7 +102,7 @@ echo ""
 echo "=== DONE! ==="
 echo ""
 echo "Manual steps remaining:"
-echo "  1. Restart terminal or run: source ~/.zshrc"
+echo "  1. Restart terminal or run: source \$HOME/.zshrc"
 echo "  2. Run tmux, then prefix + I to install plugins"
 echo "  3. Copy Cursor settings from reference/cursor-settings.json"
 echo "  4. Copy Claude Desktop config from reference/claude-desktop-config.json"

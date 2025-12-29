@@ -49,7 +49,6 @@ brew "redis"
 # Terminal
 brew "tmux"
 brew "sesh"
-brew "jstkdng/programs/ueberzugpp"
 brew "viu"
 
 # Misc

@@ -1,3 +1,11 @@
+# aliases - Show custom aliases and functions
+# Usage: aliases
+# Parses aliases.zsh and functions.zsh to display all custom commands
+# with their descriptions. Uses show-custom.sh for the actual parsing.
+aliases() {
+  bash ~/.oh-my-zsh/custom/show-custom.sh
+}
+
 # serena-init-project - Initialize a Serena project and add it as an MCP to Claude Code
 # Usage: serena-init-project [--language <lang>] [other serena args...]
 # Aliases: serena-init, serena-i, si
@@ -12,7 +20,7 @@ serena-init-project() {
   claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context claude-code --project "$(pwd)"
 }
 
-# 7zip helper - creates max-compressed zip files (compatible with standard unzip)
+# 7zip - create max-compressed zip files (compatible with standard unzip)
 # Usage: 7zip <input_file> [output_file]
 7zip() {
     if [[ -z "$1" ]]; then
@@ -37,8 +45,8 @@ _ac_agents_claude_alias() {
 add-zsh-hook chpwd _ac_agents_claude_alias
 _ac_agents_claude_alias  # Run on shell startup
 
-# Claude Context - local Milvus + Ollama for semantic code search
-# Lazy start: only starts Colima/Milvus if not already running
+# claude-ctx - start Colima + Milvus for semantic code search
+# Usage: claude-ctx
 claude-ctx() {
   if ! colima status &>/dev/null; then
     echo "Starting Colima..."
@@ -51,7 +59,8 @@ claude-ctx() {
   echo "Claude Context ready (Milvus + Ollama)"
 }
 
-# Stop claude-context services
+# claude-ctx-stop - stop Colima + Milvus services
+# Usage: claude-ctx-stop
 claude-ctx-stop() {
   echo "Stopping Milvus..."
   (cd ~/milvus && bash standalone_embed.sh stop)

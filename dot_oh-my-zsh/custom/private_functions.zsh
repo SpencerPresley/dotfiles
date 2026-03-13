@@ -28,7 +28,7 @@ serena-init-project() {
         return 1
     fi
     local output="${2:-$1.zip}"
-    7zz a -tzip -mx=9 "$output" "$1"
+    7zz a -tzip -mx=9 -mfb=258 -mpass=15 "$output" "$1"
 }
 
 # Directory-specific claude alias for ac-agents project

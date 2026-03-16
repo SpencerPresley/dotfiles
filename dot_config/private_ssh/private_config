@@ -1,6 +1,12 @@
 Host *
   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
+Host github-work
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_work
+  IdentitiesOnly yes
+
 Host atlasconnect-ec2
   HostName 3.128.89.33
   User ubuntu

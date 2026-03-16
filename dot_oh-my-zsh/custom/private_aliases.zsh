@@ -45,3 +45,7 @@ alias serena='uvx --from git+https://github.com/oraios/serena serena'  # run ser
 alias serena-init='serena-init-project'  # init serena project (see functions)
 alias serena-i='serena-init-project'  # init serena project (short)
 alias si='serena-init-project'  # init serena project (shortest)
+
+# Add 'dangerously-skip-permissions' as a mode i can switch to
+# without auto-activating it
+alias claude='claude --allow-dangerously-skip-permissions'

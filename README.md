@@ -33,12 +33,13 @@ After bootstrap: open a new terminal, then run `tmux` and press `prefix + I` to 
 
 - Shell: `.zshrc`, `.zshenv`, `.zprofile`, `.p10k.zsh`
 - Git: `.gitconfig`, `.config/git/ignore`
-- Editors: `.config/nvim/`, `.vimrc`
+- Editors: `.vimrc`
 - Terminal: `.config/tmux/`, `.config/ghostty/config`
 - Tools: `.config/gh/`, `.config/ssh/`, `.config/aria2/`
 
 **Auto-installed by `.chezmoiscripts/`:**
 
+- Neovim config (cloned from [NeovimSetup](https://github.com/SpencerPresley/NeovimSetup))
 - Powerlevel10k, zsh-autosuggestions, fast-syntax-highlighting
 - TPM (tmux plugin manager)
 - Bun, Rust, uv

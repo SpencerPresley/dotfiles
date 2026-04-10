@@ -51,52 +51,14 @@ chezmoi init --apply spencerpresley/dotfiles
 echo "Installing brew packages..."
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
 
-# Oh My Zsh
+# Oh My Zsh (must be before chezmoi since .zshrc references it)
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing Oh My Zsh..."
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# Powerlevel10k
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-    echo "Installing Powerlevel10k..."
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-fi
-
-# zsh plugins
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-    echo "Installing zsh-autosuggestions..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" ]; then
-    echo "Installing fast-syntax-highlighting..."
-    git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-fi
-
-# TPM
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-    echo "Installing TPM..."
-    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-fi
-
-# Bun
-if [ ! -d "$HOME/.bun" ]; then
-    echo "Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
-fi
-
-# Rust
-if [ ! -d "$HOME/.cargo" ]; then
-    echo "Installing Rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-fi
-
-# uv
-if ! command -v uv &>/dev/null; then
-    echo "Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-fi
+# chezmoi .chezmoiscripts handle the rest: shell plugins, dev tools,
+# docker compose, ollama install + config
 
 echo ""
 echo "=== DONE! ==="
@@ -104,7 +66,4 @@ echo ""
 echo "Manual steps remaining:"
 echo "  1. Restart terminal or run: source \$HOME/.zshrc"
 echo "  2. Run tmux, then prefix + I to install plugins"
-echo "  3. Copy Cursor settings from reference/cursor-settings.json"
-echo "  4. Copy Claude Desktop config from reference/claude-desktop-config.json"
-echo "  5. Copy work .env files from reference/work-envs/"
 echo ""

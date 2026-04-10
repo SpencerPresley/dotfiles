@@ -43,22 +43,20 @@ read -n 1
 echo "Authenticating with GitHub..."
 gh auth login
 
+# Oh My Zsh (must be before chezmoi — shell plugins clone into its custom dir)
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
 # Apply dotfiles with chezmoi
+# .chezmoiscripts handle: shell plugins, dev tools, docker compose, ollama
 echo "Applying dotfiles..."
 chezmoi init --apply spencerpresley/dotfiles
 
 # Install all brew packages
 echo "Installing brew packages..."
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
-
-# Oh My Zsh (must be before chezmoi since .zshrc references it)
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "Installing Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
-
-# chezmoi .chezmoiscripts handle the rest: shell plugins, dev tools,
-# docker compose, ollama install + config
 
 echo ""
 echo "=== DONE! ==="

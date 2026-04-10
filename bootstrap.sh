@@ -49,14 +49,17 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-# Apply dotfiles with chezmoi
-# .chezmoiscripts handle: shell plugins, dev tools, docker compose, ollama
-echo "Applying dotfiles..."
-chezmoi init --apply spencerpresley/dotfiles
+# Clone dotfiles repo (init only, apply comes after brew bundle)
+echo "Initializing chezmoi..."
+chezmoi init spencerpresley/dotfiles
 
-# Install all brew packages
+# Install all brew packages (Brewfile is now on disk from chezmoi init)
 echo "Installing brew packages..."
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
+
+# Apply dotfiles and run .chezmoiscripts (can now depend on brew packages)
+echo "Applying dotfiles..."
+chezmoi apply
 
 echo ""
 echo "=== DONE! ==="

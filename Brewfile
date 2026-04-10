@@ -39,7 +39,6 @@ brew "lazygit"
 
 # AI/ML
 brew "llama.cpp"
-brew "ollama"
 brew "opencode"
 
 # Data/DB

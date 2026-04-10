@@ -34,7 +34,6 @@ alias ssh="ssh -F ~/.config/ssh/config"  # use custom ssh config
 alias ssh-config="nvim ~/.config/ssh/config"  # edit ssh config
 
 # Tools
-alias ollama='OLLAMA_FLASH_ATTENTION=1 OLLAMA_KV_CACHE_TYPE=q8_0 ollama'  # ollama with optimizations
 alias 7z='7zz'  # 7-Zip
 alias aria='aria2c'  # aria2 download manager
 alias aria2='aria2c'  # aria2 download manager

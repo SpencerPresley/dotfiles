@@ -8,5 +8,5 @@ Host github-work
   IdentitiesOnly yes
 
 Host atlasconnect-ec2
-  HostName 3.128.89.33
+  HostName {{ onepasswordRead "op://Personal/ac-ec2-public-ip/credential" }}
   User ubuntu

@@ -23,6 +23,10 @@ curl -fsSL https://raw.githubusercontent.com/SpencerPresley/dotfiles/main/bootst
 
 After bootstrap: open a new terminal, then run `tmux` and press `prefix + I` to install plugins.
 
+**Manual post-setup:**
+
+- **Work GitHub SSH**: The `github-work` SSH alias is managed by chezmoi, but the key and auth are not. Generate or copy `~/.ssh/id_work`, add the public key to the work GitHub account, then `gh auth login` for that account.
+
 ## What's Included
 
 **Managed by chezmoi:**

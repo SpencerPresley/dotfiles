@@ -1,0 +1,91 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Configure Ollama environment variables via a LaunchAgent.
+#
+# Environment variables are defined in .chezmoidata/ollama.yaml.
+# This script re-runs when that data changes (run_onchange_).
+#
+# ollama.yaml hash: {{ include ".chezmoidata/ollama.yaml" | sha256sum }}
+
+echo "==> Configuring Ollama environment..."
+
+USERNAME="$(whoami)"
+LABEL="com.${USERNAME}.ollama-env"
+LAUNCH_AGENTS="$HOME/Library/LaunchAgents"
+PLIST_PATH="${LAUNCH_AGENTS}/${LABEL}.plist"
+
+# Clean up stale plists from a different username
+for f in "${LAUNCH_AGENTS}"/com.*.ollama-env.plist; do
+    [ -f "$f" ] || continue
+    if [ "$f" != "$PLIST_PATH" ]; then
+        echo "    Removing stale LaunchAgent: $(basename "$f")"
+        launchctl unload "$f" 2>/dev/null || true
+        rm -f "$f"
+    fi
+done
+
+# Build the setenv command string from chezmoi data
+{{- $parts := list -}}
+{{- range $key, $value := .ollama.env -}}
+{{-   $parts = append $parts (printf "launchctl setenv %s %s" $key $value) -}}
+{{- end }}
+SETENV_CMD="{{ $parts | join "; " }}"
+
+# Build the plist XML
+DESIRED_PLIST=$(cat <<'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>LABEL_PLACEHOLDER</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/sh</string>
+		<string>-c</string>
+		<string>SETENV_PLACEHOLDER</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+</dict>
+</plist>
+PLIST
+)
+
+# Substitute placeholders
+DESIRED_PLIST="${DESIRED_PLIST//LABEL_PLACEHOLDER/$LABEL}"
+DESIRED_PLIST="${DESIRED_PLIST//SETENV_PLACEHOLDER/$SETENV_CMD}"
+
+# Compare with existing plist
+if [ -f "$PLIST_PATH" ]; then
+    EXISTING=$(plutil -convert xml1 -o - "$PLIST_PATH" 2>/dev/null || true)
+    if [ "$EXISTING" = "$DESIRED_PLIST" ]; then
+        echo "    LaunchAgent already up to date."
+    else
+        echo "    Updating LaunchAgent with new environment variables..."
+        launchctl unload "$PLIST_PATH" 2>/dev/null || true
+        echo "$DESIRED_PLIST" > "$PLIST_PATH"
+    fi
+else
+    echo "    Creating LaunchAgent..."
+    mkdir -p "$LAUNCH_AGENTS"
+    echo "$DESIRED_PLIST" > "$PLIST_PATH"
+fi
+
+# Ensure it's loaded
+if ! launchctl list "$LABEL" &>/dev/null; then
+    echo "    Loading LaunchAgent..."
+    launchctl load "$PLIST_PATH"
+else
+    echo "    LaunchAgent already loaded."
+fi
+
+# Apply env vars to the current session too
+{{- range $key, $value := .ollama.env }}
+launchctl setenv "{{ $key }}" "{{ $value }}"
+{{- end }}
+
+echo "==> Ollama configuration complete."
+{{- end }}

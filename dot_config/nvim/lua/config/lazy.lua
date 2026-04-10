@@ -29,13 +29,14 @@ require("lazy").setup({
   git = {
     url_format = "git@github.com:%s.git", -- Use SSH instead of HTTPS
   },
-  rtp = {
-    disabled_plugins = {
-      "netrw",
-      "netrwPlugin",
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "netrw",
+        "netrwPlugin",
+      },
     },
   },
-  -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "catppuccin" } },
   -- automatically check for plugin updates

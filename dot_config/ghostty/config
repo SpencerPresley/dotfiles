@@ -1,7 +1,7 @@
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 13.5
 font-shaping-break = cursor
-theme = dark:Catppuccin Mocha,light:Catppuccin Mocha
+theme = Gruvbox Material Dark
 cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor,sudo,ssh-env,ssh-terminfo
@@ -15,5 +15,5 @@ copy-on-select = true
 window-inherit-working-directory = true
 window-inherit-font-size = true
 keybind = shift+enter=text:\x1b\r
-background-opacity = .9
+background-opacity = 1
 background-blur = 20

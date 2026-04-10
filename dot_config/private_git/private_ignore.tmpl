@@ -8,5 +8,8 @@
 **/agent-os/
 **/CLAUDE.md
 **/.private-journal/
-**/AGENTS.md/
-
+**/AGENTS.md
+{{ if eq .chezmoi.hostname "Spencers-MacBook-Pro-2" -}}
+**/skills-lock.json
+**/.superpowers/
+{{ end -}}

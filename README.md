@@ -4,63 +4,24 @@ Personal dotfiles managed with chezmoi + 1Password.
 
 ## New Machine Setup
 
-**Quick Overview:**
-
-1. Install Homebrew
-2. Install essentials (chezmoi, git, 1password, 1password-cli)
-3. Setup SSH for GitHub
-4. Setup 1password (Integrate with 1Password CLI and SSH Agent)
-5. Install Oh My Zsh (must be before chezmoi)
-6. Apply dotfiles (chezmoi init --apply)
-7. Install brew packages (then check for any post-install caveats)
-8. Restart terminal, then install tmux plugins
-9. App setups (Cursor, Claude Desktop, etc.)
-
-**Detailed Steps:**
+**Automated:**
 
 ```bash
-# 1. Install Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-# 2. Install essentials
-brew install chezmoi git
-brew install --cask 1password 1password-cli
-
-# 3. Setup SSH for GitHub (first time only)
-ssh-keygen -t ed25519 -C "spencerpresley96@gmail.com"
-cat "$HOME/.ssh/id_ed25519.pub"  # Add to GitHub → Settings → SSH Keys
-ssh -T git@github.com  # Verify it works
-
-# 4. Open 1Password, sign in, then:
-#    Settings → Developer → Enable "Integrate with 1Password CLI"
-#    Settings → Developer → Enable "SSH Agent"
-#    (Optional: Add your SSH key to 1Password for future machines)
-
-# 5. Install Oh My Zsh FIRST (before chezmoi, so it doesn't conflict)
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# 6. Apply dotfiles (this also runs run_once_install.sh automatically)
-chezmoi init --apply git@github.com:spencerpresley/dotfiles.git
-
-# 7. Install brew packages
-brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
-
-# 8. Check for any post-install caveats
-brew info $(brew leaves) 2>/dev/null | grep -B 2 -A 5 "Caveats"
-
-# 9. Restart terminal, then install tmux plugins
-tmux
-# Press: Ctrl+a then Shift+i to install plugins
-
-# 10. Cursor setup
-cp "$HOME/.local/share/chezmoi/reference/cursor-settings.json" "$HOME/Library/Application Support/Cursor/User/settings.json"
-cat "$HOME/.local/share/chezmoi/reference/cursor-extensions.txt" | xargs -I {} cursor --install-extension {}
-
-# 11. Claude Desktop setup
-cp "$HOME/.local/share/chezmoi/reference/claude-desktop-config.json" "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+curl -fsSL https://raw.githubusercontent.com/SpencerPresley/dotfiles/main/bootstrap.sh | bash
 ```
+
+**What bootstrap does:**
+
+1. Installs Xcode CLT, Homebrew
+2. Installs essentials (`chezmoi`, `git`, `gh`, `1password`, `1password-cli`)
+3. Prompts for 1Password setup (CLI integration + SSH Agent)
+4. Authenticates with GitHub via `gh auth login`
+5. Installs Oh My Zsh
+6. Runs `chezmoi init` (clones dotfiles repo)
+7. Runs `brew bundle` (installs all packages from Brewfile)
+8. Runs `chezmoi apply` (lays down dotfiles, runs setup scripts)
+
+After bootstrap: open a new terminal, then run `tmux` and press `prefix + I` to install plugins.
 
 ## What's Included
 
@@ -69,20 +30,14 @@ cp "$HOME/.local/share/chezmoi/reference/claude-desktop-config.json" "$HOME/Libr
 - Shell: `.zshrc`, `.zshenv`, `.zprofile`, `.p10k.zsh`
 - Git: `.gitconfig`, `.config/git/ignore`
 - Editors: `.config/nvim/`, `.vimrc`
-- Terminal: `.config/tmux/tmux.conf`, `.config/ghostty/config`
-- Tools: `.config/gh/`, `.config/ssh/`, `.config/karabiner/`
-- Claude: `.claude/settings.json`, `.claude/commands/`
+- Terminal: `.config/tmux/`, `.config/ghostty/config`
+- Tools: `.config/gh/`, `.config/ssh/`, `.config/aria2/`
 
-**Auto-installed by `run_once_install.sh`:**
+**Auto-installed by `.chezmoiscripts/`:**
 
-- Oh My Zsh + Powerlevel10k
-- zsh-autosuggestions, fast-syntax-highlighting
+- Powerlevel10k, zsh-autosuggestions, fast-syntax-highlighting
 - TPM (tmux plugin manager)
 - Bun, Rust, uv
-
-**Reference files (manual copy):**
-
-- `reference/cursor-settings.json`
-- `reference/cursor-extensions.txt`
-- `reference/claude-desktop-config.json`
-- `reference/work-envs/` - Work project .env templates
+- Docker Compose CLI plugin (macOS)
+- Ollama (native install, migrates from Homebrew if needed)
+- Ollama environment LaunchAgent (env vars from `.chezmoidata/ollama.yaml`)

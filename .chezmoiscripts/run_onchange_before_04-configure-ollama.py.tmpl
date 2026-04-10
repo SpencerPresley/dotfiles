@@ -1,0 +1,90 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/python3
+"""Configure Ollama environment variables via a LaunchAgent.
+
+Environment variables are defined in .chezmoidata/ollama.yaml.
+This script re-runs when that data changes (run_onchange_).
+
+ollama.yaml hash: {{ include ".chezmoidata/ollama.yaml" | sha256sum }}
+"""
+
+import getpass
+import plistlib
+import subprocess
+import sys
+from pathlib import Path
+
+OLLAMA_ENV = {
+{{- range $key, $value := .ollama.env }}
+    "{{ $key }}": "{{ $value }}",
+{{- end }}
+}
+
+def run(cmd, check=True, capture=False):
+    """Run a subprocess, printing failures to stderr."""
+    result = subprocess.run(cmd, capture_output=capture, text=True)
+    if check and result.returncode != 0:
+        prog = cmd[0] if cmd else "unknown"
+        print(f"    Warning: {prog} exited with {result.returncode}", file=sys.stderr)
+    return result
+
+def main():
+    print("==> Configuring Ollama environment...")
+
+    username = getpass.getuser()
+    label = f"com.{username}.ollama-env"
+    launch_agents = Path.home() / "Library" / "LaunchAgents"
+    plist_path = launch_agents / f"{label}.plist"
+
+    # Clean up stale plists from a different username
+    for f in launch_agents.glob("com.*.ollama-env.plist"):
+        if f != plist_path:
+            print(f"    Removing stale LaunchAgent: {f.name}")
+            run(["launchctl", "unload", str(f)], check=False)
+            f.unlink()
+
+    # Build the launchctl setenv command string
+    setenv_parts = [f"launchctl setenv {k} {v}" for k, v in OLLAMA_ENV.items()]
+    setenv_cmd = "; ".join(setenv_parts)
+
+    # Build the plist
+    plist_data = {
+        "Label": label,
+        "RunAtLoad": True,
+        "ProgramArguments": ["/bin/sh", "-c", setenv_cmd],
+    }
+
+    # Check if existing plist matches; if so, just ensure it's loaded
+    if plist_path.exists():
+        with open(plist_path, "rb") as f:
+            existing = plistlib.load(f)
+        if existing == plist_data:
+            print("    LaunchAgent already up to date.")
+        else:
+            print("    Updating LaunchAgent with new environment variables...")
+            run(["launchctl", "unload", str(plist_path)], check=False)
+            with open(plist_path, "wb") as f:
+                plistlib.dump(plist_data, f)
+    else:
+        print("    Creating LaunchAgent...")
+        launch_agents.mkdir(parents=True, exist_ok=True)
+        with open(plist_path, "wb") as f:
+            plistlib.dump(plist_data, f)
+
+    # Ensure it's loaded
+    result = run(["launchctl", "list", label], check=False, capture=True)
+    if result.returncode != 0:
+        print("    Loading LaunchAgent...")
+        run(["launchctl", "load", str(plist_path)])
+    else:
+        print("    LaunchAgent already loaded.")
+
+    # Apply env vars to the current session too
+    for key, value in OLLAMA_ENV.items():
+        run(["launchctl", "setenv", key, value])
+
+    print("==> Ollama configuration complete.")
+
+if __name__ == "__main__":
+    main()
+{{- end }}

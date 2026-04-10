@@ -1,0 +1,33 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+echo "==> Installing Ollama..."
+
+# Migrate from Homebrew if installed there (formula or cask)
+if command -v brew &> /dev/null; then
+    if brew list --formula ollama &> /dev/null; then
+        echo "    Migrating from Homebrew formula..."
+        brew services stop ollama 2>/dev/null || true
+        brew uninstall ollama
+        brew autoremove || true
+        brew cleanup || true
+        rm -f ~/Library/LaunchAgents/homebrew.mxcl.ollama.plist 2>/dev/null
+    elif brew list --cask ollama &> /dev/null; then
+        echo "    Migrating from Homebrew cask..."
+        brew uninstall --cask ollama
+        brew autoremove || true
+        brew cleanup || true
+    fi
+fi
+
+# Install natively if not present
+if ! [ -x /usr/local/bin/ollama ]; then
+    echo "    Installing Ollama natively..."
+    curl -fsSL https://ollama.com/install.sh | sh
+else
+    echo "    Ollama already installed: $(ollama --version)"
+fi
+
+echo "==> Ollama installation complete."
+{{- end }}

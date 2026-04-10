@@ -4,8 +4,9 @@
 # RPC settings
 enable-rpc=true
 rpc-listen-port=6800
+# aria is completely local not exposed,
+# this isn't a vulnerability or leaking secrets to git
 rpc-secret=7b5677bd0bf39eb71b625358867fee99
-
 # Download directory
 dir={{ .chezmoi.homeDir }}/Downloads
 

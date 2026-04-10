@@ -63,7 +63,5 @@ fi
 echo ""
 echo "=== DONE! ==="
 echo ""
-echo "Manual steps remaining:"
-echo "  1. Restart terminal or run: source \$HOME/.zshrc"
-echo "  2. Run tmux, then prefix + I to install plugins"
+echo "Open a new terminal, then run tmux and press prefix + I to install plugins."
 echo ""

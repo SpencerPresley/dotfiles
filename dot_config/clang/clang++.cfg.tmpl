@@ -1,0 +1,3 @@
+{{- if eq .chezmoi.os "darwin" -}}
+-isysroot {{ output "xcrun" "--show-sdk-path" | trim }}
+{{ end -}}

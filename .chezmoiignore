@@ -1,0 +1,2 @@
+# Keep reference material in the source repo only; do not apply it to $HOME.
+reference/**

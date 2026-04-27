@@ -3,14 +3,6 @@ set -euo pipefail
 
 echo "==> Installing development tools..."
 
-# TPM (Tmux Plugin Manager)
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-    echo "    Installing TPM..."
-    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-else
-    echo "    TPM already installed."
-fi
-
 # Bun
 if [ ! -d "$HOME/.bun" ]; then
     echo "    Installing Bun..."

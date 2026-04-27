@@ -64,5 +64,5 @@ chezmoi apply
 echo ""
 echo "=== DONE! ==="
 echo ""
-echo "Open a new terminal, then run tmux and press prefix + I to install plugins."
+echo "Open a new terminal, then run tmux."
 echo ""

@@ -18,8 +18,11 @@ brew "wget"
 brew "aria2"
 
 # Dev
+brew "bison"
 brew "cmake"
+brew "conan"
 brew "gopls"
+brew "llvm"
 brew "neovim"
 brew "nvm"
 brew "pnpm"

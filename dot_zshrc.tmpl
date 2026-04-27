@@ -178,3 +178,6 @@ eval "$(direnv hook zsh)"
 
 # Source machine-local env vars not tracked by chezmoi
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+export PATH="/opt/homebrew/opt/bison/bin:$PATH"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export Clang_DIR="$(brew --prefix llvm)/lib/cmake/clang"

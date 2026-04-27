@@ -1,7 +1,7 @@
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 13.5
 font-shaping-break = cursor
-theme = Subliminal
+theme = Gruvbox Material
 cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor,sudo,ssh-env,ssh-terminfo

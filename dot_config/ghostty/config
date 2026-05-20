@@ -1,10 +1,16 @@
-font-family = JetBrainsMono Nerd Font Mono
-font-size = 13.5
+font-family = Hack Nerd Font
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+font-size = 16
 font-shaping-break = cursor
-theme = Gruvbox Material
+theme = Vercel
 cursor-style = block
 cursor-style-blink = true
-shell-integration-features = no-cursor,sudo,ssh-env,ssh-terminfo
+cursor-click-to-move = true
+shell-integration = zsh
+shell-integration-features = no-cursor,sudo
 mouse-hide-while-typing = true
 window-title-font-family = JetBrainsMonoNL Nerd Font Mono
 macos-option-as-alt = left
@@ -17,3 +23,7 @@ window-inherit-font-size = true
 keybind = shift+enter=text:\x1b\r
 background-opacity = 1
 background-blur = 20
+desktop-notifications = true
+progress-style = true
+link-previews = true
+

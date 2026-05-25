@@ -3,3 +3,12 @@
 [user]
 	name = SpencerPresley
 	email = spencerpresley96@gmail.com
+
+[includeIf "gitdir:~/work/"]
+	path = ~/.gitconfig-work
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential

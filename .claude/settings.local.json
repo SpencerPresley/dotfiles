@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/spencerpresley/code/hack-skills-wip/hack-skills-marketplace/**)",
+      "Bash(mkdir docs *)",
+      "Bash(mv PLAN.md docs/PLAN.md)",
+      "Bash(mv /Users/spencerpresley/code/hack-skills-wip/PR-PLAN.md docs/PR-PLAN.md)",
+      "Read(//Users/spencerpresley/code/hack-skills-wip/**)"
+    ]
+  }
+}

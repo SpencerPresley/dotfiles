@@ -1,0 +1,44 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Tailscale on macOS = the CASK (tailscale-app: menu-bar client + system
+# extension + MagicDNS), NOT the formula (headless tailscaled daemon, which
+# competes with the app's backend). This script keeps that invariant:
+#   1. Removes the `tailscale` formula if it slipped in.
+#   2. Symlinks the app's bundled CLI into PATH so `tailscale` works in a shell.
+#
+# The cask itself is installed via the Brewfile (`cask "tailscale-app"`).
+
+echo "==> Configuring Tailscale (cask-only)..."
+
+if ! command -v brew >/dev/null 2>&1; then
+    echo "    brew not found; skipping."
+    exit 0
+fi
+
+# 1. Remove the conflicting formula if present
+if brew list --formula tailscale &>/dev/null; then
+    echo "    Removing conflicting 'tailscale' formula (keeping the cask)..."
+    brew services stop tailscale 2>/dev/null || true
+    brew uninstall --formula tailscale || true
+    brew autoremove || true
+fi
+
+# 2. Symlink the app's CLI into PATH (no sudo: brew's bin is user-writable).
+#    Only if the app is actually installed.
+APP_CLI="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+LINK="$(brew --prefix)/bin/tailscale"
+if [ -x "$APP_CLI" ]; then
+    if [ "$(readlink "$LINK" 2>/dev/null)" != "$APP_CLI" ]; then
+        echo "    Linking tailscale CLI -> $LINK"
+        ln -sf "$APP_CLI" "$LINK"
+    else
+        echo "    tailscale CLI already linked."
+    fi
+else
+    echo "    Tailscale.app not found yet; skipping CLI symlink (install the cask first)."
+fi
+
+echo "==> Tailscale configuration complete."
+{{- end }}

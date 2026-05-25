@@ -77,6 +77,7 @@ cask "setapp"
 cask "slack"
 cask "spotify"
 cask "stats"
+cask "tailscale-app"
 cask "visual-studio-code"
 cask "zoom"
 

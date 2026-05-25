@@ -30,8 +30,7 @@ alias dotfiles="chezmoi cd"  # cd to chezmoi dotfiles dir
 alias vim="nvim"  # use neovim
 
 # SSH
-alias ssh="ssh -F ~/.config/ssh/config"  # use custom ssh config
-alias ssh-config="nvim ~/.config/ssh/config"  # edit ssh config
+alias ssh-config="nvim ~/.ssh/config"  # edit ssh config
 
 # Tools
 alias rp='realpath'  # resolve absolute path

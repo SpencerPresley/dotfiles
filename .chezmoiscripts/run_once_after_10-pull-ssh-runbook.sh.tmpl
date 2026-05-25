@@ -1,0 +1,34 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Pull the SSH-consolidation runbook from 1Password onto this machine.
+#
+# The runbook is deliberately NOT committed to this PUBLIC repo (it references
+# infra: hosts, server users, key fingerprints). It lives as a 1Password
+# document ("ssh-consolidation-runbook") and is fetched to ~ here so a new
+# machine gets the migration instructions on first `chezmoi apply`.
+#
+# TRANSIENT migration helper. Once the SSH consolidation is verified complete on
+# ALL machines, this script can be deleted from chezmoi (see the runbook's
+# "Retiring this mechanism" section). It exits 0 even when the document is gone,
+# so leaving it in place after cleanup won't break apply.
+
+DEST="$HOME/ssh-consolidation-runbook.md"
+
+if ! command -v op >/dev/null 2>&1; then
+    echo "==> op (1Password CLI) not found; skipping runbook fetch."
+    exit 0
+fi
+
+echo "==> Fetching ssh-consolidation runbook from 1Password..."
+TMP="$(mktemp)"
+if op document get "ssh-consolidation-runbook" --vault Personal >"$TMP" 2>/dev/null && [ -s "$TMP" ]; then
+    mv "$TMP" "$DEST"
+    echo "    Wrote $DEST"
+else
+    rm -f "$TMP"
+    echo "    Runbook document not found / not accessible (cleaned up, or 1Password locked); skipping."
+    echo "    To fetch manually later: op document get ssh-consolidation-runbook --vault Personal --out-file \"$DEST\""
+fi
+{{- end }}

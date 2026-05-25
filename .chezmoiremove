@@ -1,0 +1,10 @@
+# Files chezmoi deletes from the target on `chezmoi apply`, on every machine.
+# Used to retire the old split SSH-config layout now that ~/.ssh/config is the
+# single tracked config.
+#
+# NOTE: deliberately does NOT list private key files. Removing those is gated on
+# verifying the 1Password agent serves the consolidated keys first — see the
+# ssh-consolidation runbook. Auto-removing a private key before the agent is
+# ready would lock you out.
+.config/ssh/config
+.config/ssh/config.local

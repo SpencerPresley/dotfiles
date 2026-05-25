@@ -1,0 +1,24 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Runs on EVERY `chezmoi apply` (plain run_ prefix) so the secret-scanning setup
+# is self-healing: install gitleaks if it's gone, (re)wire the pre-commit hook if
+# it's not wired. Cheap guard (a couple of lookups) and SILENT when there's
+# nothing to do, so it doesn't spam every apply.
+
+# 1. install gitleaks if missing
+if ! command -v gitleaks >/dev/null 2>&1 && command -v brew >/dev/null 2>&1; then
+    echo "==> gitleaks missing — installing..."
+    brew install gitleaks
+fi
+
+# 2. wire the hook in the dotfiles repo if not already wired
+SRC="{{ .chezmoi.sourceDir }}"
+if command -v gitleaks >/dev/null 2>&1 && [ -f "$SRC/.githooks/pre-commit" ]; then
+    if [ "$(git -C "$SRC" config core.hooksPath 2>/dev/null || true)" != ".githooks" ]; then
+        git -C "$SRC" config core.hooksPath .githooks
+        echo "==> wired gitleaks pre-commit hook (core.hooksPath -> .githooks)"
+    fi
+fi
+{{- end }}

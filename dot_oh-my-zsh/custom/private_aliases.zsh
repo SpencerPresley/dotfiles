@@ -34,6 +34,7 @@ alias ssh="ssh -F ~/.config/ssh/config"  # use custom ssh config
 alias ssh-config="nvim ~/.config/ssh/config"  # edit ssh config
 
 # Tools
+alias rp='realpath'  # resolve absolute path
 alias 7z='7zz'  # 7-Zip
 alias aria='aria2c'  # aria2 download manager
 alias aria2='aria2c'  # aria2 download manager

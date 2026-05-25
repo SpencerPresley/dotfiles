@@ -57,6 +57,10 @@ chezmoi init spencerpresley/dotfiles
 echo "Installing brew packages..."
 brew bundle --file="$HOME/.local/share/chezmoi/Brewfile"
 
+# Enable the gitleaks pre-commit secret-scan hook in the dotfiles repo
+echo "Enabling gitleaks pre-commit hook..."
+git -C "$HOME/.local/share/chezmoi" config core.hooksPath .githooks
+
 # Apply dotfiles and run .chezmoiscripts (can now depend on brew packages)
 echo "Applying dotfiles..."
 chezmoi apply

@@ -1,0 +1,19 @@
+#!/bin/bash
+# Pre-commit secret scan for this (PUBLIC) dotfiles repo.
+# Enabled via:  git config core.hooksPath .githooks  (set by bootstrap.sh)
+#
+# Blocks the commit if gitleaks finds a secret in the staged changes.
+# Allowlist false positives in .gitleaksignore (by fingerprint).
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+    echo "warning: gitleaks not installed — skipping secret scan (brew install gitleaks)" >&2
+    exit 0
+fi
+
+if ! gitleaks git --staged --redact --no-banner; then
+    echo "" >&2
+    echo "✋ gitleaks found a potential secret in your staged changes (see above)." >&2
+    echo "   Fix it, or if it's a false positive add its fingerprint to .gitleaksignore." >&2
+    echo "   To bypass intentionally (rare): git commit --no-verify" >&2
+    exit 1
+fi

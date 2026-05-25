@@ -1,0 +1,2 @@
+# False positive: empty LANGSMITH_API_KEY= in an .env.example template (history-only)
+f18e3d34e686e1bf6301cbe847a71d7e7e146f49:reference/work-envs/atlascyber-backend.env.example:generic-api-key:68

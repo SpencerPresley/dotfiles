@@ -30,6 +30,13 @@ Host github-work
   IdentityFile ~/.ssh/id_work.pub
   IdentitiesOnly yes
 
+# --- GitHub: jeeva ---
+Host github-jeeva
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_jeeva.pub
+  IdentitiesOnly yes
+
 # --- AtlasConnect EC2 ---
 Host atlasconnect-ec2
   HostName {{ onepasswordRead "op://Personal/ac-ec2-public-ip/credential" }}

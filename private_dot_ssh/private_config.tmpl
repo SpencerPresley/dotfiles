@@ -66,17 +66,22 @@ Host ph-demo-box-ubuntu
   IdentityFile ~/.ssh/ph-demo-box.pub
   IdentitiesOnly yes
 
-# --- AtlasCyber prod backend box "beast" (via reverse-proxy bastion) ---
-# beast has no public IP; its SSH is exposed as localhost:22000 on the
-# atlascyber-reverse-proxy EC2 bastion via a reverse tunnel. ProxyJump hops
-# through the bastion. Both hops authenticate with id_ed25519 (served by the
-# 1Password agent). `ssh atlascyber-backend` lands on beast as user atlascyber.
+# --- ATLASCYBER reverse-proxy bastion (GovCloud us-gov-east-1) ---
+# Jump host for the prod backend. Public IP lives in 1Password.
 Host atlascyber-reverse-proxy
   HostName {{ onepasswordRead "op://Personal/atlascyber-reverse-proxy-ip/credential" }}
   User ec2-user
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes
 
+# --- ATLASCYBER prod backend "beast", via the reverse-proxy bastion ---
+# beast has no public SSH; a reverse tunnel exposes it on the bastion's
+# localhost:22000 (see docs/deployment/JENKINS.md §3). Key auth works
+# end-to-end via the 1Password agent; the "atlascyberbeast-pw" 1Password
+# item is only a password fallback. Use `ssh -A atlascyber-backend` for
+# on-box git ops so your forwarded agent auths to GitHub.
+# HostKeyAlias gives beast a stable known_hosts identity so the tunneled
+# localhost:22000 doesn't collide with other localhost-forwarded hosts.
 Host atlascyber-backend
   HostName localhost
   Port 22000
@@ -84,6 +89,8 @@ Host atlascyber-backend
   ProxyJump atlascyber-reverse-proxy
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes
+  ServerAliveInterval 60
+  ServerAliveCountMax 3
   HostKeyAlias beast-reverse-tunnel
   StrictHostKeyChecking accept-new
 

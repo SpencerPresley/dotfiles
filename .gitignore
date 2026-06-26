@@ -1,2 +1,8 @@
 dot_git/
 .omc/
+
+# Claude Code runtime artifacts (lock files, etc.). Use .claude/* (not
+# .claude/) so the negation works — git won't descend into a dir excluded
+# with a trailing slash, which would make the opt-out below a no-op.
+.claude/*
+!.claude/settings.local.json

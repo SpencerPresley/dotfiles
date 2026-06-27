@@ -1,0 +1,58 @@
+==============================================================================
+  SHELL CHEATSHEET  —  run `cheatsheet` anytime
+==============================================================================
+Note: on this machine the LEFT Option key acts as Alt (macos-option-as-alt=left).
+      Wherever this says "Alt", press LEFT Option. Right Option still types
+      special characters.
+
+------------------------------------------------------------------------------
+  fzf  —  fuzzy finder (type to filter, Enter to pick, Esc to cancel)
+------------------------------------------------------------------------------
+  Ctrl-R      Fuzzy-search command history (replaces the old reverse-search)
+  Ctrl-T      Fuzzy-pick a file/dir and drop its path into the current command
+  Alt-C       Fuzzy-pick a subdirectory and cd into it
+  (inside fzf: Ctrl-J/Ctrl-K or arrows to move, Tab to multi-select)
+
+------------------------------------------------------------------------------
+  zoxide  —  smart cd that learns where you go
+------------------------------------------------------------------------------
+  z <part>    Jump to the best-matching dir you've visited, e.g. `z atlascy`
+              -> ~/work/atlascyber-main   (no full path needed)
+  zi <part>   Same but opens an fzf picker when several dirs match
+  Builds itself from your NORMAL `cd` — you don't have to change habits.
+  Plain `cd` still works exactly as before; `z` is just the shortcut.
+
+------------------------------------------------------------------------------
+  dirhistory  —  move through directories you've been in
+------------------------------------------------------------------------------
+  Alt-Left    Go BACK to the previous directory
+  Alt-Right   Go FORWARD again
+  Alt-Up      Go to the PARENT directory (cd ..)
+  (great for: cd deep, run a command, Alt-Left back out without retyping paths)
+
+------------------------------------------------------------------------------
+  Listing  (eza)  —  'e' prefix, real `ls` left untouched
+------------------------------------------------------------------------------
+  es          Plain list (eza), dirs first, with icons
+  el          Long list + git status per file
+  ea          Long list + hidden files + git status
+  et          Tree view, 2 levels deep
+
+------------------------------------------------------------------------------
+  Other handy bits
+------------------------------------------------------------------------------
+  Ctrl-O      Copy whatever is currently typed on the line to the clipboard
+              (does NOT run it)
+  x <archive> Extract any archive: .tar.gz .zip .7z .tar.bz2 ... one command
+  man <cmd>   Man pages are now colorized (colored-man-pages)
+
+------------------------------------------------------------------------------
+  git diff  (delta)  —  nothing to learn, it's automatic
+------------------------------------------------------------------------------
+  git diff / git show / git log -p / git blame  now render syntax-highlighted
+  with line numbers. Inside a multi-file diff: press  n / N  to jump between
+  files. Conflict markers use the clearer zdiff3 3-way style.
+
+==============================================================================
+  See your own custom aliases & functions with:  aliases
+==============================================================================

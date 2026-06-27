@@ -10,9 +10,13 @@ echo
 
 # Parse aliases.zsh
 # Looks for section headers (# Word) and aliases with inline comments
+first_section=1
 while IFS= read -r line; do
   # Section headers: lines like "# Git" but not documentation lines
   if [[ "$line" =~ ^#\ ([A-Za-z][A-Za-z0-9/]+)$ ]]; then
+    # Blank line between sections (but not before the very first one)
+    [[ $first_section -eq 0 ]] && echo
+    first_section=0
     echo "${BASH_REMATCH[1]}"
   # Aliases with descriptions: alias name="..."  # description
   elif [[ "$line" =~ ^alias\ ([^=]+)=.*\#\ (.+)$ ]]; then
@@ -30,6 +34,7 @@ echo
 current_name=""
 current_desc=""
 current_usage=""
+first_func=1
 
 while IFS= read -r line; do
   # Match "# function-name - description"
@@ -49,6 +54,9 @@ while IFS= read -r line; do
     current_usage="${BASH_REMATCH[1]}"
   # When we hit a function definition and have pending info, print it
   elif [[ "$line" =~ \(\)\ *\{$ ]] && [[ -n "$current_name" ]]; then
+    # Blank line between functions (but not before the very first one)
+    [[ $first_func -eq 0 ]] && echo
+    first_func=0
     if [[ -n "$current_usage" ]]; then
       printf "  %s\n" "$current_usage"
     else

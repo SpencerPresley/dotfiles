@@ -6,6 +6,18 @@ aliases() {
   bash ~/.oh-my-zsh/custom/show-custom.sh
 }
 
+# cheatsheet - Quick reference for shell tools & keybindings (fzf, zoxide, eza, delta...)
+# Usage: cheatsheet
+# Prints the curated shell guide. Uses bat for color if available, else cat.
+cheatsheet() {
+  local f=~/.oh-my-zsh/custom/cheatsheet.txt
+  if command -v bat >/dev/null 2>&1; then
+    bat --style=plain --paging=never "$f"
+  else
+    cat "$f"
+  fi
+}
+
 serena-init-project() {
   echo "To setup Serena now follow these steps:"
   echo "1. Run `uv tool install -p 3.13 serena-agent@latest --prerelease=allow`"

@@ -1,5 +1,6 @@
 # Core tools
 brew "bat"
+brew "eza"
 brew "chezmoi"
 brew "coreutils"
 brew "findutils"
@@ -9,6 +10,7 @@ brew "gawk"
 brew "moreutils"
 brew "fd"
 brew "fzf"
+brew "zoxide"
 brew "gh"
 brew "gitleaks"
 brew "htop"
@@ -37,6 +39,7 @@ brew "docker-compose"
 brew "lazydocker"
 
 # Git
+brew "git-delta"
 brew "git-filter-repo"
 brew "lazygit"
 

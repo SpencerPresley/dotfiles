@@ -32,6 +32,14 @@ alias vim="nvim"  # use neovim
 # SSH
 alias ssh-config="nvim ~/.ssh/config"  # edit ssh config
 
+# Listing
+# eza-backed listings under an 'e' prefix (leaves real `ls` untouched, so it
+# stays predictable on machines without eza). e=eza, second letter mirrors ls.
+alias es='eza --group-directories-first --icons=auto'  # ls (eza)
+alias el='eza -l --git --group-directories-first --icons=auto'  # long list + git status
+alias ea='eza -la --git --group-directories-first --icons=auto'  # long list + hidden + git
+alias et='eza --tree --level=2 --icons=auto'  # tree view (2 levels)
+
 # Tools
 alias rp='realpath'  # resolve absolute path
 alias 7z='7zz'  # 7-Zip

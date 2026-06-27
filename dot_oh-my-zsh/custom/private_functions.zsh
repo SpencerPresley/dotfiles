@@ -36,3 +36,15 @@ serena-init-project() {
     local output="${2:-$1.zip}"
     7zz a -tzip -mx=9 -mfb=258 -mpass=15 "$output" "$1"
 }
+
+# fe - Fuzzy-find file(s) with a bat preview and open them in nvim
+# Usage: fe [query]
+# Tab/Shift-Tab to multi-select; Enter opens all picks in nvim. (Plain Ctrl-T
+# still just inserts a path into the current command line.)
+fe() {
+    local -a files
+    files=("${(@f)$(fd --type f --hidden --follow --exclude .git 2>/dev/null \
+        | fzf --multi --query="${1:-}" \
+              --preview 'bat --style=numbers --color=always --line-range=:200 {}')}")
+    (( ${#files} )) && [[ -n "${files[1]}" ]] && nvim "${files[@]}"
+}

@@ -9,9 +9,16 @@ Note: on this machine the LEFT Option key acts as Alt (macos-option-as-alt=left)
   fzf  —  fuzzy finder (type to filter, Enter to pick, Esc to cancel)
 ------------------------------------------------------------------------------
   Ctrl-R      Fuzzy-search command history (replaces the old reverse-search)
-  Ctrl-T      Fuzzy-pick a file/dir and drop its path into the current command
+  Ctrl-T      Fuzzy-pick a file/dir and drop its path into the CURRENT command.
+              It composes with whatever you've typed:
+                nvim <Ctrl-T>   -> open the pick in nvim
+                cp <Ctrl-T> .   -> copy the pick here
+                git add <Ctrl-T>-> stage the pick
   Alt-C       Fuzzy-pick a subdirectory and cd into it
   (inside fzf: Ctrl-J/Ctrl-K or arrows to move, Tab to multi-select)
+
+  fe [query]  Shortcut: fuzzy-find file(s) (bat preview) and open in nvim
+              directly. Tab to multi-select, Enter opens them all.
 
 ------------------------------------------------------------------------------
   zoxide  —  smart cd that learns where you go

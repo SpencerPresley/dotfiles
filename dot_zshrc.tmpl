@@ -101,6 +101,16 @@ fpath=("$HOME/.zsh/completions" $fpath)
 
 source $ZSH/oh-my-zsh.sh
 
+# Claude Code runs its "Bash" tool through this zsh (non-interactive, but it
+# sources this rc). zsh's default NOMATCH aborts a command when a glob matches
+# nothing, where bash passes the literal through — so glob/pathspec-heavy
+# commands (git -- '*.ts', grep, find -name) fail under the agent. Relax that
+# ONLY for Claude Code (gated on $CLAUDECODE) so the interactive shell keeps
+# NOMATCH's safety net.
+if [[ -n "$CLAUDECODE" ]]; then
+  unsetopt nomatch
+fi
+
 # NVM setup
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm

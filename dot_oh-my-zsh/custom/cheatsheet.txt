@@ -1,65 +1,57 @@
 ==============================================================================
-  SHELL CHEATSHEET  —  run `cheatsheet` anytime
+  SHELL CHEATSHEET                          run:  cheatsheet   (or: chtsht)
 ==============================================================================
-Note: on this machine the LEFT Option key acts as Alt (macos-option-as-alt=left).
-      Wherever this says "Alt", press LEFT Option. Right Option still types
-      special characters.
+LEFT Option = Alt on this machine (macos-option-as-alt=left). Where this says
+"Alt", press LEFT Option. Right Option still types special characters.
 
-------------------------------------------------------------------------------
-  fzf  —  fuzzy finder (type to filter, Enter to pick, Esc to cancel)
-------------------------------------------------------------------------------
-  Ctrl-R      Fuzzy-search command history (replaces the old reverse-search)
-  Ctrl-T      Fuzzy-pick a file/dir and drop its path into the CURRENT command.
-              It composes with whatever you've typed:
-                nvim <Ctrl-T>   -> open the pick in nvim
-                cp <Ctrl-T> .   -> copy the pick here
-                git add <Ctrl-T>-> stage the pick
-  Alt-C       Fuzzy-pick a subdirectory and cd into it
-  (inside fzf: Ctrl-J/Ctrl-K or arrows to move, Tab to multi-select)
 
-  fe [query]  Shortcut: fuzzy-find file(s) (bat preview) and open in nvim
-              directly. Tab to multi-select, Enter opens them all.
+fzf — fuzzy finder   (type to filter · Enter=pick · Esc=cancel · Tab=multi)
+------------------------------------------------------------------------------
+  Ctrl-R          fuzzy-search command history
+  Ctrl-T          insert a file path into the CURRENT command — it composes:
+                    nvim <Ctrl-T>       open the pick in nvim
+                    cp <Ctrl-T> .       copy the pick into the current dir
+                    git add <Ctrl-T>    stage the pick
+  Alt-C           fuzzy-pick a subdirectory and cd into it
+  fe [query]      shortcut: fuzzy-find file(s) w/ bat preview, open in nvim
 
-------------------------------------------------------------------------------
-  zoxide  —  smart cd that learns where you go
-------------------------------------------------------------------------------
-  z <part>    Jump to the best-matching dir you've visited, e.g. `z atlascy`
-              -> ~/work/atlascyber-main   (no full path needed)
-  zi <part>   Same but opens an fzf picker when several dirs match
-  Builds itself from your NORMAL `cd` — you don't have to change habits.
-  Plain `cd` still works exactly as before; `z` is just the shortcut.
 
+zoxide — smart cd that learns where you go
 ------------------------------------------------------------------------------
-  dirhistory  —  move through directories you've been in
-------------------------------------------------------------------------------
-  Alt-Left    Go BACK to the previous directory
-  Alt-Right   Go FORWARD again
-  Alt-Up      Go to the PARENT directory (cd ..)
-  (great for: cd deep, run a command, Alt-Left back out without retyping paths)
+  z <part>        jump to best-matching visited dir
+                    e.g.  z atlascy  →  ~/work/atlascyber-main
+  zi <part>       same, but fzf-pick when several dirs match
+                  (learns from your NORMAL cd — plain cd still works as before)
 
-------------------------------------------------------------------------------
-  Listing  (eza)  —  'e' prefix, real `ls` left untouched
-------------------------------------------------------------------------------
-  es          Plain list (eza), dirs first, with icons
-  el          Long list + git status per file
-  ea          Long list + hidden files + git status
-  et          Tree view, 2 levels deep
 
+dirhistory — move through dirs you've visited
 ------------------------------------------------------------------------------
-  Other handy bits
-------------------------------------------------------------------------------
-  Ctrl-O      Copy whatever is currently typed on the line to the clipboard
-              (does NOT run it)
-  x <archive> Extract any archive: .tar.gz .zip .7z .tar.bz2 ... one command
-  man <cmd>   Man pages are now colorized (colored-man-pages)
+  Alt-Left        back to the previous directory
+  Alt-Right       forward again
+  Alt-Up          up to the parent directory (cd ..)
 
+
+listing (eza) — 'e' prefix; real `ls` left untouched
 ------------------------------------------------------------------------------
-  git diff  (delta)  —  nothing to learn, it's automatic
+  es              plain list, dirs first, icons
+  el              long list + git status
+  ea              long list + hidden + git status
+  et              tree view, 2 levels deep
+
+
+other
 ------------------------------------------------------------------------------
-  git diff / git show / git log -p / git blame  now render syntax-highlighted
-  with line numbers. Inside a multi-file diff: press  n / N  to jump between
-  files. Conflict markers use the clearer zdiff3 3-way style.
+  Ctrl-O          copy the current command line to the clipboard (does NOT run)
+  x <archive>     extract any archive: .tar.gz .zip .7z .tar.bz2 …
+  man <cmd>       man pages are now colorized
+
+
+git diff (delta) — automatic, nothing to learn
+------------------------------------------------------------------------------
+  git diff / show / log -p / blame    syntax-highlighted, with line numbers
+  n / N                               jump between files inside a multi-file diff
+  conflicts                           use the clearer zdiff3 3-way style
 
 ==============================================================================
-  See your own custom aliases & functions with:  aliases
+  your own aliases & functions:  aliases
 ==============================================================================

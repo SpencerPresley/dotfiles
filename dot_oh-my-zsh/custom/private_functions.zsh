@@ -12,7 +12,7 @@ aliases() {
 cheatsheet() {
   local f=~/.oh-my-zsh/custom/cheatsheet.txt
   if command -v bat >/dev/null 2>&1; then
-    bat --style=plain --paging=never "$f"
+    bat --style=plain --paging=never --wrap=never "$f"
   else
     cat "$f"
   fi

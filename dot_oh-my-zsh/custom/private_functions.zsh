@@ -124,7 +124,38 @@ install-codex-skills() {
       -l|-L|--local)  local_ignore=1; shift ;;
       -f|-F|--force)  force=1; shift ;;
       -h|--help)
-        print "Usage: install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]"
+        print -P -- "%F{green}install-codex-skills%f — project-scoped skills for Codex (wraps 'npx skills add')
+
+Installs a skills repo into ./.agents/skills for %F{cyan}Codex only%f, so superpowers-style
+skills stay scoped to one project instead of active everywhere like the global Codex plugin.
+
+%F{cyan}Usage%f
+  install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]
+  ics …                          (alias)
+
+%F{cyan}Options%f
+  -p -P --path <dir>   Install into <dir> instead of the current directory.
+  -l -L --local        Add .agents/ and skills-lock.json to <dir>/.gitignore.
+  -f -F --force        Override safety guards (see below).
+  -r -R --repo <url>   Install a different skills repo (default: obra/superpowers).
+  -h    --help         Show this help.
+
+%F{cyan}Guards%f
+  • Refuses \$HOME unless you pass BOTH --path and --force; a bare cwd of \$HOME
+    is always refused (treated as an accident).
+  • --local never creates a ~/.gitignore — at \$HOME it's a no-op with a note.
+  • --local with no .git and/or no .gitignore still does the sensible thing + warns.
+
+%F{cyan}What --force does%f (depends on context)
+  • --path at \$HOME               → install there anyway (unscoped, active everywhere).
+  • --local + already git-tracked  → untrack via 'git rm --cached -r' so .gitignore
+                                     takes effect. Working-tree files are kept.
+
+%F{cyan}Examples%f
+  ics                                  # superpowers → ./ for Codex
+  ics --local                          # …and gitignore it
+  ics -p ~/work/proj -l                # install into another project + gitignore
+  ics --repo https://github.com/vercel-labs/agent-skills"
         return 0 ;;
       *)
         print -P "%F{red}Unknown option '$1'.%f" >&2

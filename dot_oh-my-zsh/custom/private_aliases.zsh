@@ -51,6 +51,9 @@ alias aria-start='aria2c --conf-path=~/.config/aria2/aria2.conf'  # start aria2 
 # Help
 alias chtsht='cheatsheet'  # shell tooling cheatsheet (alias of cheatsheet)
 
+# Skills
+alias ics='install-codex-skills'  # install a skills repo into a project for Codex (default: superpowers; see functions)
+
 # Serena
 alias serena='uvx --from git+https://github.com/oraios/serena serena'  # run serena
 alias serena-init='serena-init-project'  # init serena project (see functions)

@@ -94,3 +94,115 @@ fe() {
               --preview 'bat --style=numbers --color=always --line-range=:200 {}')}")
     (( ${#files} )) && [[ -n "${files[1]}" ]] && nvim "${files[@]}"
 }
+
+# install-codex-skills - Install a skills repo into a project's .agents/skills for Codex (default: obra/superpowers)
+# Usage: install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]
+#   -p|-P|--path <dir>  Install into <dir> instead of the current directory.
+#   -l|-L|--local       Add .agents/ and skills-lock.json to the dir's .gitignore.
+#   -f|-F|--force       Override safety guards: the $HOME refusal (with --path)
+#                       and, with --local, untrack any skill files git already
+#                       tracks (git rm --cached) so .gitignore takes effect.
+#   -r|-R|--repo <url>  Install a different skills repo (default: obra/superpowers).
+# Thin wrapper around `npx skills add` (scoped to Codex — the reason this exists
+# is that the Codex superpowers plugin installs globally with no project scoping).
+# That command already clones the repo and creates .agents/skills, so this only
+# adds what it won't: a $HOME safety guard, an optional install path, and
+# .gitignore management for --local.
+install-codex-skills() {
+  local repo="https://github.com/obra/superpowers"
+  local target="$PWD"
+  local path_given=0 local_ignore=0 force=0
+
+  while (( $# )); do
+    case "$1" in
+      -p|-P|--path)
+        [[ -n "$2" ]] || { print -P "%F{red}--path requires a directory argument.%f" >&2; return 1; }
+        target="$2"; path_given=1; shift 2 ;;
+      -r|-R|--repo)
+        [[ -n "$2" ]] || { print -P "%F{red}--repo requires a URL argument.%f" >&2; return 1; }
+        repo="$2"; shift 2 ;;
+      -l|-L|--local)  local_ignore=1; shift ;;
+      -f|-F|--force)  force=1; shift ;;
+      -h|--help)
+        print "Usage: install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]"
+        return 0 ;;
+      *)
+        print -P "%F{red}Unknown option '$1'.%f" >&2
+        print "Usage: install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]" >&2
+        return 1 ;;
+    esac
+  done
+
+  if [[ ! -d "$target" ]]; then
+    print -P "%F{red}Not a directory: $target%f" >&2
+    return 1
+  fi
+  local abs="${target:A}"
+
+  # Guard: never blindly install into $HOME. Only an explicit `--path ~ --force`
+  # may override — a bare cwd of $HOME is treated as an accident and refused.
+  if [[ "$abs" == "${HOME:A}" ]]; then
+    if (( path_given && force )); then
+      print -P "%F{214}Warning: installing skills directly into \$HOME ($abs) [--force].%f"
+      print -P "%F{214}  \$HOME is the top of every path — agents that walk up the tree may load these%f"
+      print -P "%F{214}  skills from many/all directories (the un-scoped, active-everywhere behavior%f"
+      print -P "%F{214}  this tool exists to avoid), and they can duplicate/conflict with any%f"
+      print -P "%F{214}  per-project .agents/skills. Proceeding because --force was given.%f"
+    else
+      print -P "%F{red}Refusing to install skills into \$HOME ($abs).%f" >&2
+      (( path_given )) && print -P "%F{red}Re-run with --force to install into \$HOME anyway (unscoped, active-everywhere risk).%f" >&2
+      return 1
+    fi
+  fi
+
+  ( cd "$abs" && npx skills add "$repo" --skill '*' --agent 'codex' --project --yes ) || return 1
+
+  # Never write a ~/.gitignore. $HOME isn't a git repo (chezmoi lives elsewhere),
+  # so an ignore file there does nothing — and you never want one. Turn --local
+  # into a no-op here rather than creating it.
+  if (( local_ignore )) && [[ "$abs" == "${HOME:A}" ]]; then
+    print -P "%F{214}Warning: --local ignored at \$HOME — refusing to create ~/.gitignore.%f"
+    print -P "%F{214}  To ignore .agents/ everywhere, add it to your global git excludes instead%f"
+    print -P "%F{214}  (chezmoi: dot_config/private_git/private_ignore), not a ~/.gitignore.%f"
+    local_ignore=0
+  fi
+
+  if (( local_ignore )); then
+    local gi="$abs/.gitignore"
+    local has_git=0; [[ -e "$abs/.git" ]] && has_git=1
+    local do_write=0 warn=""
+
+    if [[ -f "$gi" ]]; then
+      do_write=1
+      (( has_git )) || warn="Warning: no .git in $abs, but a .gitignore exists — added entries anyway."
+    elif (( has_git )); then
+      do_write=1
+      print -P "Created %F{cyan}.gitignore%f and added skill entries."
+    else
+      warn="Warning: no .git or .gitignore in $abs — skills installed but not gitignored."
+    fi
+
+    if (( do_write )); then
+      local -a entries=('.agents/' 'skills-lock.json')
+      local e
+      for e in $entries; do
+        grep -qxF -- "$e" "$gi" 2>/dev/null || print -r -- "$e" >> "$gi"
+
+        # A .gitignore entry can't ignore a path git already tracks. If a prior
+        # install got committed, warn (or, with --force, actually untrack it).
+        if (( has_git )) && [[ -n "$(git -C "$abs" ls-files -- "$e" 2>/dev/null)" ]]; then
+          if (( force )); then
+            git -C "$abs" rm -r --cached --quiet -- "$e" 2>/dev/null \
+              && print -P "%F{214}Untracked already-committed '$e' (git rm --cached) so .gitignore takes effect.%f"
+          else
+            print -P "%F{214}Warning: '$e' is already tracked by git — .gitignore won't ignore it. Re-run with --force to untrack it ('git rm --cached -r $e'), or do it yourself.%f"
+          fi
+        fi
+      done
+    fi
+
+    [[ -n "$warn" ]] && print -P "%F{214}$warn%f"
+  fi
+
+  return 0
+}

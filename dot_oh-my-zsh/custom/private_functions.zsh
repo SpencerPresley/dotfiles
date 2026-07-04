@@ -18,6 +18,23 @@ cheatsheet() {
   fi
 }
 
+# relpath - Print real path(s) relative to the current directory
+# Usage: relpath <path> [path ...]
+relpath() {
+  if (( $# == 0 )); then
+    echo "Usage: relpath <path> [path ...]" >&2
+    return 1
+  fi
+
+  python3 - "$@" <<'PY'
+import os
+import sys
+
+for path in sys.argv[1:]:
+    print(os.path.relpath(os.path.realpath(path)))
+PY
+}
+
 serena-init-project() {
   echo "To setup Serena now follow these steps:"
   echo "1. Run `uv tool install -p 3.13 serena-agent@latest --prerelease=allow`"

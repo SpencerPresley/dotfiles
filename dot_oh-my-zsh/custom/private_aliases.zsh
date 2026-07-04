@@ -49,6 +49,7 @@ alias aria2='aria2c'  # aria2 download manager
 alias aria-start='aria2c --conf-path=~/.config/aria2/aria2.conf'  # start aria2 RPC daemon (with secret)
 
 # Help
+alias als='aliases'  # list custom aliases + functions (alias of aliases)
 alias chtsht='cheatsheet'  # shell tooling cheatsheet (alias of cheatsheet)
 
 # Skills

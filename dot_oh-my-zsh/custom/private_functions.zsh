@@ -98,8 +98,9 @@ fe() {
 # install-codex-skills - Install a skills repo into a project's .agents/skills for Codex (default: obra/superpowers)
 # Usage: install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]
 #   -p|-P|--path <dir>  Install into <dir> instead of the current directory.
-#   -l|-L|--local       Gitignore the installed skills git isn't already
-#                       tracking (leaves committed skills / lockfile alone).
+#   -l|-L|--local       Gitignore only the skills THIS run installs (diffed
+#                       against a pre-install snapshot); leaves pre-existing
+#                       and committed skills alone.
 #   -f|-F|--force       Override the $HOME refusal (only meaningful with --path).
 #   -r|-R|--repo <url>  Install a different skills repo (default: obra/superpowers).
 # Thin wrapper around `npx skills add` (scoped to Codex — the reason this exists
@@ -140,11 +141,12 @@ skills stay scoped to one project instead of active everywhere like the global C
   -h    --help         Show this help.
 
 %F{cyan}--local%f
-  Ignores only skill dirs under .agents/skills that git isn't already tracking,
-  plus skills-lock.json if untracked. Committed skills (and a shared lockfile)
-  are left alone — a .gitignore can't ignore a tracked path, and un-committing
-  isn't --local's job. To make an already-committed skill local, 'git rm --cached
-  -r <path>' it yourself. Never creates a ~/.gitignore; at \$HOME it's a no-op.
+  Gitignores only the skill dirs THIS run installs — diffed against a snapshot
+  taken just before the install — plus skills-lock.json if this run created it.
+  Skills already present (yours, another tool's, or committed) are left untouched.
+  It only ever appends to .gitignore; it never deletes or un-tracks anything. To
+  make an already-committed skill local, 'git rm --cached -r <path>' it yourself.
+  Never creates a ~/.gitignore; at \$HOME it's a no-op.
 
 %F{cyan}Guards%f
   • Refuses \$HOME unless you pass BOTH --path and --force; a bare cwd of \$HOME
@@ -186,6 +188,20 @@ skills stay scoped to one project instead of active everywhere like the global C
     fi
   fi
 
+  # For --local we gitignore ONLY what this run installs. Snapshot the skill
+  # dirs (and whether the lockfile exists) BEFORE the install so we can diff
+  # afterward — this way pre-existing skills (hand-made, from another tool, or
+  # already committed) are left completely alone. "untracked" is the wrong test:
+  # a skill you made but haven't committed yet is untracked too, and shouldn't
+  # be ignored. Provenance ("did this command create it") is the right axis.
+  local -a pre_skills=()
+  local lock_pre=0
+  if (( local_ignore )); then
+    local d
+    for d in "$abs/.agents/skills"/*(N/); do pre_skills+=( "${d:t}" ); done
+    [[ -e "$abs/skills-lock.json" ]] && lock_pre=1
+  fi
+
   ( cd "$abs" && npx skills add "$repo" --skill '*' --agent 'codex' --project --yes ) || return 1
 
   # Never write a ~/.gitignore. $HOME isn't a git repo (chezmoi lives elsewhere),
@@ -202,23 +218,25 @@ skills stay scoped to one project instead of active everywhere like the global C
     local gi="$abs/.gitignore"
     local has_git=0; [[ -e "$abs/.git" ]] && has_git=1
 
-    # Ignore only the skills git ISN'T already tracking (the ones this install
-    # left uncommitted), plus skills-lock.json if untracked. Anything git tracks
-    # — a committed skill or a shared lockfile — is left alone: a .gitignore
-    # entry can't ignore a tracked path anyway, and un-committing files isn't
-    # --local's job. git is the source of truth for "is this committed", so
-    # there's no need to diff the installer's output to know what to ignore.
+    # Diff against the pre-install snapshot: ignore only skill dirs that this
+    # run created, plus skills-lock.json only if this run created it. A dir that
+    # already existed (yours, another tool's, or committed) is skipped — not our
+    # business. As a final guard, if a "new" path is somehow already git-tracked
+    # (committed then working-copy deleted, then recreated), leave it: a
+    # .gitignore can't ignore a tracked path, and un-committing isn't our job.
     local -a entries=() kept=()
-    local d p
-    for d in "$abs/.agents/skills"/*(N/); do
-      p=".agents/skills/${d:t}/"
-      if (( has_git )) && [[ -n "$(git -C "$abs" ls-files -- ".agents/skills/${d:t}" 2>/dev/null)" ]]; then
+    local sdir name p
+    for sdir in "$abs/.agents/skills"/*(N/); do
+      name="${sdir:t}"
+      (( ${pre_skills[(Ie)$name]} )) && continue      # pre-existed → not from this run
+      p=".agents/skills/$name/"
+      if (( has_git )) && [[ -n "$(git -C "$abs" ls-files -- ".agents/skills/$name" 2>/dev/null)" ]]; then
         kept+=( "$p" )
       else
         entries+=( "$p" )
       fi
     done
-    if [[ -e "$abs/skills-lock.json" ]]; then
+    if (( ! lock_pre )) && [[ -e "$abs/skills-lock.json" ]]; then   # lockfile created this run
       if (( has_git )) && [[ -n "$(git -C "$abs" ls-files -- skills-lock.json 2>/dev/null)" ]]; then
         kept+=( "skills-lock.json" )
       else
@@ -237,16 +255,16 @@ skills stay scoped to one project instead of active everywhere like the global C
           grep -qxF -- "$p" "$gi" 2>/dev/null || print -r -- "$p" >> "$gi"
         done
         (( created )) \
-          && print -P "Created %F{cyan}.gitignore%f and ignored ${#entries} skill path(s)." \
-          || print -P "Ignored ${#entries} skill path(s) in %F{cyan}.gitignore%f."
+          && print -P "Created %F{cyan}.gitignore%f and ignored ${#entries} newly-installed skill path(s)." \
+          || print -P "Ignored ${#entries} newly-installed skill path(s) in %F{cyan}.gitignore%f."
         (( has_git )) || print -P "%F{214}Warning: no .git in $abs — .gitignore updated, but nothing is tracked here.%f"
       fi
     else
-      print -P "%F{214}--local: nothing to ignore — installed skills are already tracked (or none present).%f"
+      print -P "%F{214}--local: nothing new to ignore — this run added no skills (all were already present).%f"
     fi
 
     if (( ${#kept} )); then
-      print -P "%F{214}Left already-tracked path(s) committed: ${(j:, :)kept}.%f"
+      print -P "%F{214}Left already-tracked path(s) alone: ${(j:, :)kept}.%f"
       print -P "%F{214}  --local won't un-commit them — run 'git rm --cached -r <path>' yourself to make them local.%f"
     fi
   fi

@@ -1,9 +1,19 @@
+# ─── Prompt engine selector ─────────────────────────────────────────────────
+# Chooses which prompt renders this shell: p10k | starship | omp.
+# Read from a machine-local file (NOT tracked by chezmoi) so each machine can
+# differ; switch with `prompt-use <engine>` + a new shell. Defaults to p10k.
+# MUST run before p10k's instant-prompt block below.
+PROMPT_ENGINE=$(command cat "${XDG_CONFIG_HOME:-$HOME/.config}/prompt-engine" 2>/dev/null || echo p10k)
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# Only when p10k is the active engine.
+if [[ $PROMPT_ENGINE == p10k ]]; then
+  typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
 fi
 
 # If you come from bash you might have to change your $PATH.
@@ -16,7 +26,13 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# Only let oh-my-zsh drive the prompt when p10k is active; starship/omp init
+# themselves after oh-my-zsh.sh loads (see the prompt-engine case block below).
+if [[ $PROMPT_ENGINE == p10k ]]; then
+  ZSH_THEME="powerlevel10k/powerlevel10k"
+else
+  ZSH_THEME=""
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -154,10 +170,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-# eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/omp-custom-princess-theme.json)"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
+# NOTE: prompt init happens at the very END of this file, via the prompt-engine
+# case block. p10k is sourced there (not here), so it can't fight starship/omp.
 export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
 
 . "$HOME/.local/bin/env"
@@ -198,5 +213,31 @@ eval "$(direnv hook zsh)"
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 export PATH="/opt/homebrew/opt/bison/bin:$PATH"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# ─── Prompt engine init ──────────────────────────────────────────────────────
+# Render the prompt chosen by $PROMPT_ENGINE (set at the top of this file).
+# Runs last so nothing overrides it. Switch engines with `prompt-use`.
+# To customize: p10k → `p10k configure` / ~/.p10k.zsh · starship →
+# ~/.config/starship.toml · omp → ~/.config/ohmyposh/theme.json
+case $PROMPT_ENGINE in
+  p10k)
+    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    ;;
+  starship)
+    if command -v starship >/dev/null 2>&1; then
+      eval "$(starship init zsh)"
+    else
+      print -P "%F{red}prompt-engine:%f starship not installed — run: brew install starship" >&2
+    fi
+    ;;
+  omp|oh-my-posh)
+    if command -v oh-my-posh >/dev/null 2>&1; then
+      eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/theme.json)"
+    else
+      print -P "%F{red}prompt-engine:%f oh-my-posh not installed — run: brew install oh-my-posh" >&2
+    fi
+    ;;
+  *)
+    print -P "%F{yellow}prompt-engine:%f unknown engine '$PROMPT_ENGINE' — using p10k" >&2
+    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    ;;
+esac

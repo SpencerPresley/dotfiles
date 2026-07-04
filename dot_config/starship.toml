@@ -1,0 +1,63 @@
+# Starship config — tuned to mirror the p10k Pure/snazzy 2-line prompt.
+# Snazzy palette: blue dir, grey git, magenta/red prompt char, yellow duration.
+#
+# TRANSIENT PROMPT: starship has NO native transient prompt for zsh (only
+# fish / pwsh / cmd as of v1.26). Wiring it here means a community zle shim
+# such as `zsh-transient-prompt`, which is finicky next to
+# fast-syntax-highlighting + zsh-autosuggestions. Deliberately left unwired —
+# this is the "janky part" and it's opt-in, not baked in.
+
+add_newline = true            # blank line before each prompt (≈ p10k PROMPT_ADD_NEWLINE)
+palette = "snazzy"
+
+format = """
+$directory$git_branch$git_status$cmd_duration
+$python$character"""
+
+[palettes.snazzy]
+red = "#FF5C57"
+yellow = "#F3F99D"
+blue = "#57C7FF"
+magenta = "#FF6AC1"
+cyan = "#9AEDFE"
+white = "#F1F1F0"
+grey = "242"
+
+[directory]
+style = "blue"
+format = "[$path]($style) "
+truncation_length = 0         # full path, like Pure
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "grey"
+format = "[$branch]($style)"
+
+[git_status]
+style = "grey"
+format = "[$all_status$ahead_behind]($style)"
+conflicted = "~"
+untracked = ""                # keep it Pure-minimal: a single "*" means dirty
+modified = "*"
+staged = "*"
+deleted = "*"
+renamed = "*"
+stashed = ""
+ahead = " ⇡${count}"
+behind = " ⇣${count}"
+diverged = " ⇕"
+
+[cmd_duration]
+min_time = 5000               # match p10k's 5s threshold
+format = " [$duration]($style)"
+style = "yellow"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "grey"
+
+[character]
+success_symbol = "[❯](magenta)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](magenta)"

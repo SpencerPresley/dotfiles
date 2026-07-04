@@ -54,6 +54,35 @@ serena-init-project() {
     7zz a -tzip -mx=9 -mfb=258 -mpass=15 "$output" "$1"
 }
 
+# prompt-use - Switch the active shell prompt engine (p10k | starship | omp)
+# Usage: prompt-use <engine>     e.g. prompt-use starship
+# Writes ~/.config/prompt-engine (machine-local, not tracked by chezmoi) and
+# reloads the shell so the new prompt takes effect. No args = show current +
+# choices. Switching back is the same command; the other configs stay put.
+prompt-use() {
+  local -a engines=(p10k starship omp)
+  local file="${XDG_CONFIG_HOME:-$HOME/.config}/prompt-engine"
+  local current
+  current=$(command cat "$file" 2>/dev/null || echo p10k)
+
+  if (( $# == 0 )); then
+    print -P "Current prompt engine: %F{cyan}$current%f"
+    print    "Available:            ${engines[*]}"
+    print -P "Usage: %F{green}prompt-use%f <${(j:|:)engines}>"
+    return 0
+  fi
+
+  if [[ " ${engines[*]} " != *" $1 "* ]]; then
+    print -P "%F{red}Unknown engine '$1'.%f Choose one of: ${engines[*]}" >&2
+    return 1
+  fi
+
+  mkdir -p "${file:h}"
+  print -r -- "$1" > "$file"
+  print -P "Prompt engine → %F{green}$1%f  (reloading shell…)"
+  exec zsh
+}
+
 # fe - Fuzzy-find file(s) with a bat preview and open them in nvim
 # Usage: fe [query]
 # Tab/Shift-Tab to multi-select; Enter opens all picks in nvim. (Plain Ctrl-T

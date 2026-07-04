@@ -1,0 +1,63 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 3,
+  "final_space": true,
+  "console_title_template": "{{ .Shell }} in {{ .Folder }}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#57C7FF",
+          "template": "{{ .Path }} ",
+          "properties": { "style": "full" }
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "#6c6c6c",
+          "template": "{{ .HEAD }}{{ if or .Working.Changed .Staging.Changed }}*{{ end }}{{ if gt .Ahead 0 }} ⇡{{ .Ahead }}{{ end }}{{ if gt .Behind 0 }} ⇣{{ .Behind }}{{ end }}",
+          "properties": {
+            "fetch_status": true,
+            "branch_icon": "",
+            "commit_icon": "@"
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "#6c6c6c",
+          "template": "{{ if .Venv }}{{ .Venv }} {{ end }}",
+          "properties": {
+            "display_mode": "context",
+            "fetch_virtual_env": true
+          }
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#FF6AC1",
+          "foreground_templates": ["{{ if gt .Code 0 }}#FF5C57{{ end }}"],
+          "template": "❯"
+        }
+      ]
+    }
+  ],
+  "transient_prompt": {
+    "background": "transparent",
+    "foreground": "#FF6AC1",
+    "foreground_templates": ["{{ if gt .Code 0 }}#FF5C57{{ end }}"],
+    "template": "❯ "
+  }
+}

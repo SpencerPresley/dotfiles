@@ -56,6 +56,10 @@ brew "tmux"
 brew "sesh"
 brew "viu"
 
+# Prompt engines (switch between them with `prompt-use`)
+brew "starship"
+brew "oh-my-posh"
+
 # Misc
 brew "graphviz"
 brew "nmap"

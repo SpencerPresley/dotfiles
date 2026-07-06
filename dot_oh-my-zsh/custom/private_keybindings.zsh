@@ -61,13 +61,18 @@ bindkey -M vicmd '^X^E' edit-command-line
 # simple `tcopy '…'` command: no pipe to fight, and the line runs exactly once
 # (the reason to wrap *before* the parse rather than re-run it after — that would
 # execute a trailing `| tee`/`| xargs` twice). Type the command normally, then
-# press Ctrl-X Ctrl-C *instead of* Enter (mnemonic: Ctrl-X for widgets, C = copy;
+# press Ctrl-X then c *instead of* Enter (mnemonic: Ctrl-X for widgets, c = copy;
 # sibling of ^X^E above). Don't pre-type `tcopy` — it wraps the raw line; history
 # records the rewritten `tcopy '…'` form.
+#
+# Chord is ^X c (Ctrl-X, then a plain c), NOT ^X^C: Ctrl-C is the terminal's
+# interrupt char, so it raises SIGINT and aborts the line before the chord can
+# complete — it never reaches the widget. Same trap for ^C/^Z/^\/^S/^Q, and ^Y
+# (DSUSP on macOS); the second key must be an ordinary character.
 tcopy-line() {
   [[ -n $BUFFER ]] && BUFFER="tcopy ${(qq)BUFFER}"
   zle accept-line
 }
 zle -N tcopy-line
-bindkey -M viins '^X^C' tcopy-line   # insert mode
-bindkey -M vicmd '^X^C' tcopy-line   # normal mode
+bindkey -M viins '^Xc' tcopy-line   # insert mode
+bindkey -M vicmd '^Xc' tcopy-line   # normal mode

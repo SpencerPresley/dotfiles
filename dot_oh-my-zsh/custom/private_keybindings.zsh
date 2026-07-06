@@ -76,3 +76,19 @@ tcopy-line() {
 zle -N tcopy-line
 bindkey -M viins '^Xc' tcopy-line   # insert mode
 bindkey -M vicmd '^Xc' tcopy-line   # normal mode
+
+# ── Copy the current command line to the clipboard, WITHOUT running it ────────
+# The plain-text sibling of ^X c above. ^O copies whatever is on the line right
+# now (BUFFER) to the clipboard and leaves everything as-is — nothing runs, the
+# line stays put to keep editing or to Enter. Use it to grab a command to paste
+# elsewhere when you DON'T want to run it (or don't want its output, just the
+# command). print -rn keeps the text exact, no trailing newline; zle -M flashes a
+# confirmation under the prompt. ^O is safe to bind (not a tty signal char) —
+# verified it reaches the widget rather than being eaten like ^C would be.
+pbcopy-line() {
+  print -rn -- "$BUFFER" | pbcopy
+  zle -M 'copied command line to clipboard (not run)'
+}
+zle -N pbcopy-line
+bindkey -M viins '^O' pbcopy-line   # insert mode
+bindkey -M vicmd '^O' pbcopy-line   # normal mode

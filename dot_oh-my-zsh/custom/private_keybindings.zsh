@@ -1,6 +1,13 @@
 # Keybindings — sourced by oh-my-zsh AFTER all plugins, so these overrides win
 # over plugin bindings (notably dirhistory + fzf). To disable vi mode, comment
 # out the `bindkey -v` + KEYTIMEOUT lines below; everything else is harmless.
+#
+# Cheatsheet tags: a `#:: Title` line opens a section in `cheatsheet`, and a
+# bindkey carrying a trailing `#: description` becomes a row under it (the key
+# name is auto-derived from the sequence, so it can't be mislabeled). Untagged
+# binds don't appear. show-keys.sh does the parsing; see functions.zsh's
+# cheatsheet(). Tag one binding per key (the viins/insert one); the vicmd/emacs
+# duplicates stay untagged so each key shows once.
 
 # ── Reclaim Option-F / Option-B for word motion ──────────────────────────────
 # The dirhistory plugin's Ghostty special-case grabs the ^[f / ^[b *letter*
@@ -18,16 +25,18 @@ bindkey -v
 KEYTIMEOUT=1          # 10ms Esc lag instead of the default 400ms (KEYTIMEOUT=40)
 
 # Word motion + partial-accept in insert mode too.
-bindkey -M viins '^[f' forward-word
-bindkey -M viins '^[b' backward-word
+#:: word motion
+bindkey -M viins '^[f' forward-word   #: move forward one word
+bindkey -M viins '^[b' backward-word  #: move back one word
 
 # Keep the emacs insert-mode keys you rely on — `bindkey -v` unlinks the emacs
 # keymap from `main`, so without these you'd lose them while typing.
-bindkey -M viins '^A' beginning-of-line
-bindkey -M viins '^E' end-of-line
-bindkey -M viins '^K' kill-line
-bindkey -M viins '^U' backward-kill-line
-bindkey -M viins '^W' backward-kill-word
+#:: line editing (insert mode)
+bindkey -M viins '^A' beginning-of-line   #: jump to start of line
+bindkey -M viins '^E' end-of-line         #: jump to end of line
+bindkey -M viins '^K' kill-line           #: delete to end of line
+bindkey -M viins '^U' backward-kill-line  #: delete to start of line
+bindkey -M viins '^W' backward-kill-word  #: delete the previous word
 
 # Re-bind fzf widgets in insert mode. They were bound in the emacs keymap, which
 # `bindkey -v` detaches from `main`; without this you'd lose fzf Ctrl-R/T + Alt-C.
@@ -37,16 +46,18 @@ bindkey -M viins '^[c' fzf-cd-widget
 
 # Prefix history search on Up/Down in insert mode (parity with your emacs setup:
 # type a prefix, press Up, walk only matching history).
-bindkey -M viins '^[[A' up-line-or-beginning-search
-bindkey -M viins '^[[B' down-line-or-beginning-search
+#:: history search
+bindkey -M viins '^[[A' up-line-or-beginning-search    #: prefix-search history backward
+bindkey -M viins '^[[B' down-line-or-beginning-search  #: prefix-search history forward
 bindkey -M viins '^[OA' up-line-or-beginning-search
 bindkey -M viins '^[OB' down-line-or-beginning-search
 
 # Edit the current command line in $EDITOR (nvim). Ctrl-X Ctrl-E in either mode;
 # vim's `v` visual-mode in normal mode is deliberately left untouched.
+#:: command line & clipboard
 autoload -Uz edit-command-line
 zle -N edit-command-line
-bindkey -M viins '^X^E' edit-command-line
+bindkey -M viins '^X^E' edit-command-line  #: edit the command line in $EDITOR (nvim)
 bindkey -M vicmd '^X^E' edit-command-line
 
 # ── Copy the current command line + its output to the clipboard ───────────────
@@ -74,7 +85,7 @@ tcopy-line() {
   zle accept-line
 }
 zle -N tcopy-line
-bindkey -M viins '^Xc' tcopy-line   # insert mode
+bindkey -M viins '^Xc' tcopy-line   #: run the line AND copy the command + its output (tcopy)
 bindkey -M vicmd '^Xc' tcopy-line   # normal mode
 
 # ── Copy the current command line to the clipboard, WITHOUT running it ────────
@@ -90,5 +101,5 @@ pbcopy-line() {
   zle -M 'copied command line to clipboard (not run)'
 }
 zle -N pbcopy-line
-bindkey -M viins '^O' pbcopy-line   # insert mode
+bindkey -M viins '^O' pbcopy-line   #: copy the command line (does NOT run it)
 bindkey -M vicmd '^O' pbcopy-line   # normal mode

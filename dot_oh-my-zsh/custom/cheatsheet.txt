@@ -41,8 +41,6 @@ listing (eza) — 'e' prefix; real `ls` left untouched
 
 other
 ------------------------------------------------------------------------------
-  Ctrl-O          copy the current command line to the clipboard — does NOT run it
-  Ctrl-X c        run the line AND copy the command + its output  (tcopy · tc)
   x <archive>     extract any archive: .tar.gz .zip .7z .tar.bz2 …
   man <cmd>       man pages are now colorized
 
@@ -53,6 +51,7 @@ git diff (delta) — automatic, nothing to learn
   n / N                               jump between files inside a multi-file diff
   conflicts                           use the clearer zdiff3 3-way style
 
-==============================================================================
-  your own aliases & functions:  aliases
-==============================================================================
+vi mode — modal line editing (Esc toggles; prompt shows ❯ insert · ❮ normal)
+------------------------------------------------------------------------------
+  Esc             insert → normal mode (then hjkl · ciw · dd · f<x> · % · . )
+  i / a           normal → insert (before / after the cursor)

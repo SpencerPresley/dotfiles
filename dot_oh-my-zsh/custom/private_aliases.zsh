@@ -54,6 +54,7 @@ alias tc='tcopy'  # run a command and copy its command+output to clipboard (see 
 # Help
 alias als='aliases'  # list custom aliases + functions (alias of aliases)
 alias chtsht='cheatsheet'  # shell tooling cheatsheet (alias of cheatsheet)
+alias cs='cheatsheet'  # shell tooling cheatsheet (short)
 
 # Skills
 alias ics='install-codex-skills'  # install a skills repo into a project for Codex (default: superpowers; see functions)

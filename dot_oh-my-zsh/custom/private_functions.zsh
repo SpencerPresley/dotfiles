@@ -8,14 +8,21 @@ aliases() {
 
 # cheatsheet - Quick reference for shell tools & keybindings (fzf, zoxide, eza, delta...)
 # Usage: cheatsheet
-# Prints the curated shell guide. Uses bat for color if available, else cat.
+# Prints the curated tool guide (cheatsheet.txt) with bat if available, then the
+# auto-generated keybinding sections — show-keys.sh parses keybindings.zsh, so
+# they can't drift from what's actually bound — then a pointer to `als`.
 cheatsheet() {
   local f=~/.oh-my-zsh/custom/cheatsheet.txt
+  local keys=~/.oh-my-zsh/custom/show-keys.sh
   if command -v bat >/dev/null 2>&1; then
     bat --style=plain --paging=never --wrap=never "$f"
   else
-    cat "$f"
+    command cat "$f"
   fi
+  [[ -x $keys ]] && { print; "$keys"; }
+  print -r -- "=============================================================================="
+  print -r -- "  your own aliases & functions:  aliases  (als)"
+  print -r -- "=============================================================================="
 }
 
 # relpath - Print real path(s) relative to the current directory
@@ -379,4 +386,16 @@ tcopy() {
 
   print -u2 -P "%F{green}✔%f copied command + output to clipboard"
   return $ret
+}
+
+# y — yazi with directory-follow: browse around, and quitting with `q` cd's the
+# shell to wherever you ended up (`Q` quits without moving). Mechanism: yazi
+# writes its final cwd into the file passed via --cwd-file on `quit`, and we cd
+# there. From https://yazi-rs.github.io/docs/quick-start
+y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+  command rm -f -- "$tmp"
 }

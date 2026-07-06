@@ -1,0 +1,15 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Regenerate the yazi "ghostty" flavor whenever the Ghostty theme could have
+# changed (run_onchange_after: runs after files are applied, so it reads the
+# freshly rendered ~/.config/ghostty/config).
+#
+# config.tmpl hash:  {{ include "dot_config/ghostty/config.tmpl" | sha256sum }}
+# ghostty.yaml hash: {{ include ".chezmoidata/ghostty.yaml" | sha256sum }}
+# generator hash:    {{ include "private_dot_local/bin/executable_ghostty-yazi-flavor" | sha256sum }}
+
+echo "==> Syncing yazi flavor from Ghostty theme..."
+"$HOME/.local/bin/ghostty-yazi-flavor"
+{{- end }}

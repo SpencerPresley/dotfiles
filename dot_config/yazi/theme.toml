@@ -1,0 +1,10 @@
+#:schema https://yazi-rs.github.io/schemas/theme.json
+
+# The "ghostty" flavor is GENERATED from the active Ghostty theme by
+# ~/.local/bin/ghostty-yazi-flavor (chezmoi reruns it when the ghostty config
+# or its per-machine data changes; safe to run by hand after a theme change).
+# It points both modes at the same flavor because the generator reads the
+# machine's resolved Ghostty config. Overrides placed here win over the flavor.
+[flavor]
+dark = "ghostty"
+light = "ghostty"

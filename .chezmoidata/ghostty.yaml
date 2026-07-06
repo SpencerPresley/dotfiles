@@ -1,0 +1,21 @@
+# Per-machine Ghostty overrides, rendered into ~/.config/ghostty/config by
+# dot_config/ghostty/config.tmpl. After editing: `chezmoi apply`, then reload
+# Ghostty (cmd+shift+,).
+#
+# Each key under `overrides` is a machine's hostname — find it with:
+#   chezmoi execute-template '{{ .chezmoi.hostname }}'
+# Values are ghostty config keys verbatim. Scalars override the base config;
+# YAML lists replace list options entirely (the template emits a reset line
+# first, since ghostty list options otherwise append). Quote YAML-ambiguous
+# strings like yes/no/on/off.
+#
+# Example:
+#   overrides:
+#     Spencers-MacBook-Pro-2:
+#       font-size: 17
+#       theme: Dracula
+#       font-family:              # list → replaces the whole fallback chain
+#         - Monaspace Neon
+#         - Symbols Nerd Font Mono
+ghostty:
+  overrides: {}

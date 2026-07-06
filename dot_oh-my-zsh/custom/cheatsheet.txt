@@ -42,6 +42,7 @@ listing (eza) — 'e' prefix; real `ls` left untouched
 other
 ------------------------------------------------------------------------------
   x <archive>     extract any archive: .tar.gz .zip .7z .tar.bz2 …
+  y               yazi file manager; quit with q to cd where you browsed (Q stays)
   man <cmd>       man pages are now colorized
 
 

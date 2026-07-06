@@ -1,0 +1,14 @@
+#:schema https://yazi-rs.github.io/schemas/keymap.json
+
+# IMPORTANT: only add bindings via [[mgr.prepend_keymap]] / [[mgr.append_keymap]].
+# A bare [[mgr.keymap]] silently replaces the ENTIRE default keymap. To disable
+# a single default binding, prepend its key with run = "noop".
+#
+# Defaults: https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/keymap-default.toml
+# Inside tmux, the C-a prefix swallows yazi's ctrl-a (select all) — use C-a C-a.
+#
+# Example:
+# [[mgr.prepend_keymap]]
+# on = "<C-t>"
+# run = "tab_create --current"
+# desc = "New tab in current dir"

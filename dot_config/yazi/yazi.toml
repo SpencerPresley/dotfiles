@@ -1,0 +1,9 @@
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+# Only deltas from the defaults belong here — yazi merges this file over its
+# preset at the option level, so don't restate defaults.
+# Defaults: https://yazi-rs.github.io/docs/configuration/yazi
+
+[mgr]
+show_hidden = true
+linemode = "size"

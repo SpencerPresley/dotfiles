@@ -184,6 +184,11 @@ export GITHUB_PAT="{{ onepasswordRead "op://Personal/GitHub PAT Personal/token" 
 export GHCR_PAT="{{ onepasswordRead "op://Personal/GHCR_PAT/credential" }}"
 export UV_PUBLISH_TOKEN="{{ onepasswordRead "op://Personal/PyPi Token/credential" }}"
 export CONTEXT7_API_KEY="{{ onepasswordRead "op://Personal/CONTEXT7_API_KEY/credential" }}"
+# Jenkins MCP server (prod CI). Raw token also works for jenkins-cli.jar / REST
+# (e.g. -auth spencer:$JENKINS_MCP_TOKEN). JENKINS_MCP_AUTH is a ready Basic
+# header the Claude Code MCP config references as ${JENKINS_MCP_AUTH}.
+export JENKINS_MCP_TOKEN="{{ onepasswordRead "op://Personal/ClaudeCodeJenkinsMCPToken/credential" }}"
+export JENKINS_MCP_AUTH="Basic $(printf 'spencer:%s' "$JENKINS_MCP_TOKEN" | base64 | tr -d '\n')"
 
 # pnpm
 export PNPM_HOME="/Users/spencer/Library/pnpm"

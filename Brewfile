@@ -56,6 +56,14 @@ brew "tmux"
 brew "sesh"
 brew "viu"
 
+# Yazi file manager + preview dependencies
+# (also uses fd, ripgrep, fzf, zoxide, jq, sevenzip from above)
+brew "yazi"
+brew "ffmpeg"       # video thumbnails
+brew "imagemagick"  # HEIC/JXL/font previews
+brew "poppler"      # PDF previews
+brew "resvg"        # SVG previews
+
 # Prompt engines (switch between them with `prompt-use`)
 brew "starship"
 brew "oh-my-posh"
@@ -85,7 +93,6 @@ cask "spotify"
 cask "stats"
 cask "tailscale-app"
 cask "visual-studio-code"
-cask "zoom"
 
 # Fonts
 cask "font-fira-code-nerd-font"
@@ -93,5 +100,8 @@ cask "font-hack-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-maple-mono-nf"
 cask "font-meslo-for-powerlevel10k"
-cask "font-monaspace"
+cask "font-monaspace"     # unpatched, kept: VS Code editor.fontFamily uses "Monaspace Neon"
+cask "font-monaspace-nf"
+cask "font-sauce-code-pro-nerd-font"
+cask "font-symbols-only-nerd-font"
 cask "font-victor-mono-nerd-font"

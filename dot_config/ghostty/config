@@ -1,4 +1,9 @@
 font-family = Hack Nerd Font
+# Icon-glyph fallback: only consulted for codepoints the primary font lacks.
+# Hack NF is a complete Nerd Font, so this is inert today — it exists so a
+# future font swap (here or in config.local) can't lose Nerd Font icons.
+# See docs/fonts.md in the chezmoi repo for the per-font glyph inventory.
+font-family = Symbols Nerd Font Mono
 font-style = Regular
 font-style-bold = Bold
 font-style-italic = Italic
@@ -26,4 +31,14 @@ background-blur = 20
 desktop-notifications = true
 progress-style = true
 link-previews = true
+
+# Per-machine overrides live in ~/.config/ghostty/config.local (unmanaged by
+# chezmoi; ? = ignore if missing). Ghostty itself reads it on every config
+# load/reload — chezmoi is not involved. It loads after this entire file, so
+# scalar values in it win. Gotcha: list options (font-family, keybind,
+# palette, …) APPEND to this file's values instead of replacing them — reset
+# the list first with an empty value:
+#     font-family =
+#     font-family = Some Other Font
+config-file = ?config.local
 

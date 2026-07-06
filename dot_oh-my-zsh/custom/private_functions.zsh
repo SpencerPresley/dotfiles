@@ -35,12 +35,17 @@ for path in sys.argv[1:]:
 PY
 }
 
+# serena-init-project - Print the steps to install/enable Serena for Claude Code
+# Usage: serena-init-project
+# Single-quoted on purpose: the commands contain backticks, and in double quotes
+# those are command substitution — the previous version actually RAN uv install /
+# serena setup / uv upgrade / uv uninstall instead of printing them.
 serena-init-project() {
-  echo "To setup Serena now follow these steps:"
-  echo "1. Run `uv tool install -p 3.13 serena-agent@latest --prerelease=allow`"
-  echo "2. Run `serena setup claude-code`. This will setup serena globally e.g., user level for claude code."
-  echo "To update run `uv tool upgrade serena-agent --prerelease=allow`"
-  echo "To uninstall run `uv tool uninstall serena-agent`"
+  print 'To setup Serena now follow these steps:'
+  print '1. Run `uv tool install -p 3.13 serena-agent@latest --prerelease=allow`'
+  print '2. Run `serena setup claude-code`  (sets serena up globally, user-level, for Claude Code).'
+  print 'To update:    uv tool upgrade serena-agent --prerelease=allow'
+  print 'To uninstall: uv tool uninstall serena-agent'
 }
 
 # 7zip - create max-compressed zip files (compatible with standard unzip)

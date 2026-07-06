@@ -271,3 +271,107 @@ skills stay scoped to one project instead of active everywhere like the global C
 
   return 0
 }
+
+# _tcopy_killtree - internal: kill a pid and its whole descendant tree.
+# Deepest-first so children die before parents can reparent them to init. Uses
+# pgrep -P, so it works regardless of job-control/process-group state (a plain
+# `kill -$pid` group-kill silently no-ops when monitor mode is off).
+_tcopy_killtree() {
+  local p=$1 sig=${2:-TERM} c
+  for c in ${(f)"$(pgrep -P $p 2>/dev/null)"}; do
+    _tcopy_killtree $c $sig
+  done
+  kill -$sig $p 2>/dev/null
+}
+
+# tcopy - Run a command/pipeline and copy the command + its output to clipboard
+# Usage: tcopy <command ...>   |   tcopy '<cmd | with | pipes>'
+# Runs the command, captures its output (stdout+stderr), strips ANSI color, and
+# copies a clean "$ <command>\n<output>" block to the clipboard via pbcopy — for
+# handing a command and its result to someone (e.g. Claude) with full context
+# and no terminal prompt glyph. Output is copied, NOT re-printed; only a
+# one-line confirmation is shown. Exit status of the command is propagated.
+#
+# The line is eval'd, so aliases and functions (rlp, gs, es, …) resolve exactly
+# as if you typed them. Pipes/redirects/globs are shell syntax that the shell
+# splits BEFORE tcopy runs, so quote the whole line to keep them intact:
+#     tcopy 'brew list | grep font'    # pipeline captured
+#     tcopy brew list | grep font      # pipes tcopy's OWN output into grep
+# A single unpiped command needs no quotes: tcopy rlp a b c
+#
+# Blocking-command guard: a long-running/interactive command (npm run dev,
+# tail -f, top, vim) would capture forever, and there's no way to tell that
+# apart from a slow-but-finite command. So tcopy bounds it: if the command
+# hasn't finished in TCOPY_TIMEOUT seconds (default 30) it's killed — process
+# tree and all — and nothing is copied. Tune or disable per-call:
+#     TCOPY_TIMEOUT=120 tcopy 'cargo build'     # allow a slow build
+#     TCOPY_TIMEOUT=0   tcopy '<command>'        # no limit at all
+tcopy() {
+  if (( $# == 0 )); then
+    print -u2 "Usage: tcopy <command ...>   |   tcopy '<cmd | with | pipes>'"
+    return 1
+  fi
+  if ! command -v pbcopy >/dev/null 2>&1; then
+    print -u2 "tcopy: pbcopy not found (needs the macOS clipboard tool)."
+    return 1
+  fi
+
+  setopt localoptions extended_glob no_notify
+
+  # 1 arg  → a full shell command line, used verbatim (pipes/redirects/globs OK).
+  # 2+ args → joined with only the quoting each needs, so literal args with
+  #           spaces or glob chars survive the round-trip.
+  local cmdline
+  if (( $# == 1 )); then
+    cmdline="$1"
+  else
+    cmdline="${(j: :)${(q-)@}}"
+  fi
+
+  local timeout=${TCOPY_TIMEOUT:-30}
+  local output ret
+
+  if (( timeout <= 0 )); then
+    # No guard: run inline, simplest path.
+    output="$(eval "$cmdline" 2>&1)"
+    ret=$?
+  else
+    # Guarded: run detached, writing output to a temp file and its exit code to
+    # a sentinel file. Poll for the sentinel (robust — unlike `kill -0`, it can't
+    # be fooled by an unreaped zombie); on timeout, kill the whole tree and bail.
+    local tmp done
+    tmp=$(mktemp "${TMPDIR:-/tmp}/tcopy.XXXXXX") || return 1
+    done="${tmp}.done"
+    { eval "$cmdline" >| "$tmp" 2>&1; print -rn -- $? >| "$done" } &!
+    local pid=$!
+    local -F elapsed=0
+    while [[ ! -e "$done" ]] && (( elapsed < timeout )); do
+      sleep 0.05
+      (( elapsed += 0.05 ))
+    done
+    if [[ -e "$done" ]]; then
+      ret="$(<$done)"
+      [[ "$ret" == <-> ]] || ret=1
+      output="$(<$tmp)"
+      command rm -f "$tmp" "$done"
+    else
+      _tcopy_killtree $pid TERM
+      sleep 0.2
+      _tcopy_killtree $pid KILL
+      command rm -f "$tmp" "$done"
+      print -u2 -P "%F{red}✗%f tcopy: didn't finish in ${timeout}s — looks long-running or interactive, so nothing was copied."
+      print -u2 -P "   %F{242}rerun with a longer/disabled limit, e.g. TCOPY_TIMEOUT=0 tcopy …%f"
+      return 124
+    fi
+  fi
+
+  output="${output//$'\x1b'\[[0-9;]#[a-zA-Z]/}"   # strip ANSI SGR/CSI escapes
+
+  {
+    printf '$ %s\n' "$cmdline"
+    [[ -n "$output" ]] && print -r -- "$output"
+  } | pbcopy
+
+  print -u2 -P "%F{green}✔%f copied command + output to clipboard"
+  return $ret
+}

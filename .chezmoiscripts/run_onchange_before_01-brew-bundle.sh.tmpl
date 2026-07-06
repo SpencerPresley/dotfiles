@@ -1,0 +1,13 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Sync Homebrew packages whenever the Brewfile changes (run_onchange_).
+# Installs anything missing; never uninstalls extras (no `cleanup --force`).
+#
+# Brewfile hash: {{ include "Brewfile" | sha256sum }}
+
+echo "==> Syncing Homebrew packages from Brewfile..."
+brew bundle --file="{{ .chezmoi.sourceDir }}/Brewfile"
+echo "==> Brew bundle complete."
+{{- end }}

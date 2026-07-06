@@ -48,3 +48,26 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M viins '^X^E' edit-command-line
 bindkey -M vicmd '^X^E' edit-command-line
+
+# ── Copy the current command line + its output to the clipboard ───────────────
+# tcopy (see functions.zsh) copies a "$ <cmd>\n<output>" block to the clipboard,
+# handy for handing a command and its result to someone with full context. The
+# catch: a pipeline must be quoted — typing `tcopy brew list | grep font` pipes
+# tcopy's OWN output into grep, because the shell splits `|` before tcopy runs.
+#
+# This widget removes that chore. It grabs the whole typed line as text (BUFFER
+# — pipes, redirects, quotes and all), single-quotes it with ${(qq)…} so it
+# survives as one word, and prepends `tcopy `. The shell then only ever sees one
+# simple `tcopy '…'` command: no pipe to fight, and the line runs exactly once
+# (the reason to wrap *before* the parse rather than re-run it after — that would
+# execute a trailing `| tee`/`| xargs` twice). Type the command normally, then
+# press Ctrl-X Ctrl-C *instead of* Enter (mnemonic: Ctrl-X for widgets, C = copy;
+# sibling of ^X^E above). Don't pre-type `tcopy` — it wraps the raw line; history
+# records the rewritten `tcopy '…'` form.
+tcopy-line() {
+  [[ -n $BUFFER ]] && BUFFER="tcopy ${(qq)BUFFER}"
+  zle accept-line
+}
+zle -N tcopy-line
+bindkey -M viins '^X^C' tcopy-line   # insert mode
+bindkey -M vicmd '^X^C' tcopy-line   # normal mode

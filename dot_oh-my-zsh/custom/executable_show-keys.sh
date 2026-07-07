@@ -1,15 +1,20 @@
 #!/usr/bin/env zsh
-# Generates the keybinding sections of the cheatsheet from keybindings.zsh, so
-# they can't drift from what's actually bound. Called by the `cheatsheet`
+# Generates the keybinding sections of the tooling guide from keybindings.zsh, so
+# they can't drift from what's actually bound. Called by the `tips`
 # function (functions.zsh).
 #
 # Convention in keybindings.zsh:
-#   #:: Title                          opens a cheatsheet section
+#   #:: Title                          opens a tips section
 #   bindkey ... 'SEQ' widget  #: desc  becomes a row (SEQ auto-rendered to a key
 #                                      name; deduped; untagged binds are skipped)
 
 emulate -L zsh
 setopt extended_glob
+
+# Color to match `als` / `ics --help`: bold-cyan section titles, green keys, dim
+# rules. Only when writing to a terminal, so piped/redirected output stays clean.
+local B='' C='' G='' D='' R=''
+if [[ -t 1 ]]; then B=$'\033[1m'; C=$'\033[36m'; G=$'\033[32m'; D=$'\033[2m'; R=$'\033[0m'; fi
 
 local KEYS_FILE=${KEYS_FILE:-~/.oh-my-zsh/custom/keybindings.zsh}
 [[ -r $KEYS_FILE ]] || return 0
@@ -74,11 +79,12 @@ for s in $secs; do (( ${order[(Ie)$s]} )) || order+=$s; done
 
 local sec; integer idx
 for sec in $order; do
-  print -r -- "$sec"
-  print -r -- "${(l:78::-:):-}"
+  print -r -- "${B}${C}${sec}${R}"
+  print -r -- "${D}${(l:78::-:):-}${R}"
   for idx in {1..${#keys}}; do
     [[ $secs[idx] == $sec ]] || continue
-    printf "  %-${maxw}s  %s\n" "$keys[idx]" "$descs[idx]"
+    # Pad after the reset so the green key's ANSI bytes don't skew the column.
+    printf "  ${G}%s${R}%*s  %s\n" "$keys[idx]" "$(( maxw - ${#keys[idx]} ))" "" "$descs[idx]"
   done
   print
 done

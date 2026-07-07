@@ -6,23 +6,65 @@ aliases() {
   bash ~/.oh-my-zsh/custom/show-custom.sh
 }
 
-# cheatsheet - Quick reference for shell tools & keybindings (fzf, zoxide, eza, delta...)
-# Usage: cheatsheet
-# Prints the curated tool guide (cheatsheet.txt) with bat if available, then the
-# auto-generated keybinding sections — show-keys.sh parses keybindings.zsh, so
-# they can't drift from what's actually bound — then a pointer to `als`.
-cheatsheet() {
-  local f=~/.oh-my-zsh/custom/cheatsheet.txt
+# tips - Quick reference for shell tools & keybindings (fzf, zoxide, eza, delta...)
+# Usage: tips [--no-footer]
+# Prints the curated tool guide (tips.txt) — colorized (bold-cyan section titles,
+# dim rules) when writing to a terminal — then the auto-generated keybinding
+# sections (show-keys.sh parses keybindings.zsh, so they can't drift from what's
+# actually bound), then a pointer to `als`. `--no-footer` drops that pointer; it's
+# used by `help`, which already prints your aliases itself.
+tips() {
+  local f=~/.oh-my-zsh/custom/tips.txt
   local keys=~/.oh-my-zsh/custom/show-keys.sh
-  if command -v bat >/dev/null 2>&1; then
-    bat --style=plain --paging=never --wrap=never "$f"
+  local footer=1
+  [[ "$1" == "--no-footer" ]] && footer=0
+  if [[ -t 1 ]]; then
+    _tips_colorize < "$f"
   else
     command cat "$f"
   fi
   [[ -x $keys ]] && { print; "$keys"; }
-  print -r -- "=============================================================================="
-  print -r -- "  your own aliases & functions:  aliases  (als)"
-  print -r -- "=============================================================================="
+  if (( footer )); then
+    print -r  -- "=============================================================================="
+    print -rP -- "  your own aliases & functions:  %F{green}als%f"
+    print -r  -- "=============================================================================="
+  fi
+}
+
+# help - Everything at a glance: your custom aliases/functions + the tooling tips
+# Usage: help
+# Runs `aliases` (your `als` output) then `tips` (the tooling/keybinding guide).
+# `help` isn't a zsh builtin (only run-help→man exists), so this claims it cleanly.
+help() {
+  aliases
+  print
+  tips --no-footer
+}
+
+# _tips_colorize - internal: colorize tips.txt for a terminal. Bold-cyan section
+# titles + the CHEATSHEET banner, dim ==== / ---- rules, everything else verbatim.
+# One-line lookahead: a line is a section title when the NEXT line is a --- rule,
+# so titles need no markup in the source file. `have` guards against double-print.
+_tips_colorize() {
+  awk '
+    function emit(s){
+      if(!have) return
+      if(s ~ /^={3,}/)          printf "%s%s%s\n", B, s, R
+      else if(s ~ /CHEATSHEET/)  printf "%s%s%s%s\n", B, C, s, R
+      else                       printf "%s\n", s
+    }
+    BEGIN{ B="\033[1m"; C="\033[36m"; D="\033[2m"; R="\033[0m"; have=0 }
+    {
+      if ($0 ~ /^-{5,}$/ && have) {          # current line is a rule => buf was a title
+        printf "%s%s%s%s\n", B, C, buf, R
+        printf "%s%s%s\n",   D, $0,  R
+        have=0; next
+      }
+      emit(buf)
+      buf=$0; have=1
+    }
+    END{ emit(buf) }
+  '
 }
 
 # relpath - Print real path(s) relative to the current directory
@@ -136,23 +178,23 @@ install-codex-skills() {
       -l|-L|--local)  local_ignore=1; shift ;;
       -f|-F|--force)  force=1; shift ;;
       -h|--help)
-        print -P -- "%F{green}install-codex-skills%f — project-scoped skills for Codex (wraps 'npx skills add')
+        print -P -- "%B%F{green}install-codex-skills%f%b — project-scoped skills for Codex (wraps 'npx skills add')
 
 Installs a skills repo into ./.agents/skills for %F{cyan}Codex only%f, so superpowers-style
 skills stay scoped to one project instead of active everywhere like the global Codex plugin.
 
-%F{cyan}Usage%f
+%B%F{cyan}Usage%f%b
   install-codex-skills [--path <dir>] [--local] [--force] [--repo <url>]
   ics …                          (alias)
 
-%F{cyan}Options%f
+%B%F{cyan}Options%f%b
   -p -P --path <dir>   Install into <dir> instead of the current directory.
   -l -L --local        Gitignore the installed skills git isn't already tracking.
   -f -F --force        Override the \$HOME refusal (only meaningful with --path).
   -r -R --repo <url>   Install a different skills repo (default: obra/superpowers).
   -h    --help         Show this help.
 
-%F{cyan}--local%f
+%B%F{cyan}--local%f%b
   Gitignores only the skill dirs THIS run installs — diffed against a snapshot
   taken just before the install — plus skills-lock.json if this run created it.
   Skills already present (yours, another tool's, or committed) are left untouched.
@@ -160,12 +202,12 @@ skills stay scoped to one project instead of active everywhere like the global C
   make an already-committed skill local, 'git rm --cached -r <path>' it yourself.
   Never creates a ~/.gitignore; at \$HOME it's a no-op.
 
-%F{cyan}Guards%f
+%B%F{cyan}Guards%f%b
   • Refuses \$HOME unless you pass BOTH --path and --force; a bare cwd of \$HOME
     is always refused (treated as an accident).
   • In a non-repo with no .gitignore, --local warns instead of creating one.
 
-%F{cyan}Examples%f
+%B%F{cyan}Examples%f%b
   ics                                  # superpowers → ./ for Codex
   ics --local                          # …and gitignore it
   ics -p ~/work/proj -l                # install into another project + gitignore
@@ -386,6 +428,142 @@ tcopy() {
 
   print -u2 -P "%F{green}✔%f copied command + output to clipboard"
   return $ret
+}
+
+# ghst - Ghostty helper actions (list fonts/keybinds/themes/colors) + custom help
+# Usage: ghst [command] [extra ghostty args]   (bare `ghst` = `ghst help`)
+#   fonts          ghostty +list-fonts     — font faces Ghostty can see
+#   keys|binds|kbs ghostty +list-keybinds  — active keybindings
+#   themes         ghostty +list-themes    — available color themes
+#   colors         ghostty +list-colors    — named colors + their hex values
+#   help           this help (the default)
+# A thin dispatcher over `ghostty +<action>` for the handful of read-only actions
+# worth quick access — the leader is `ghst` (not `g*`, which the oh-my-zsh git
+# plugin owns). Editing/showing config is deliberately absent: this repo manages
+# Ghostty config (dot_config/ghostty/config.tmpl + a gitignored .ghostty.local),
+# so +edit-config/+show-config would bypass that source of truth. macOS can't
+# launch the emulator from the CLI, but these actions run fine there. Synonyms are
+# accepted (keys/binds/kbs, theme/themes, …) so there's nothing to misremember;
+# trailing args pass through, e.g. `ghst fonts --help`.
+ghst() {
+  command -v ghostty >/dev/null 2>&1 || {
+    print -u2 -P "%F{red}ghst: ghostty not found on PATH.%f"; return 1
+  }
+
+  local cmd=${1:-help}
+  (( $# )) && shift
+
+  case "$cmd" in
+    help|-h|--help)
+      print -P "%F{green}ghst%f — Ghostty helper actions  (%F{242}bare ghst = help%f)"
+      print
+      print -P "  %F{green}ghst fonts%f          list font faces         (+list-fonts)"
+      print -P "  %F{green}ghst keys%f  │ binds  list keybindings        (+list-keybinds)"
+      print -P "  %F{green}ghst themes%f         list color themes       (+list-themes)"
+      print -P "  %F{green}ghst colors%f         list named colors + hex (+list-colors)"
+      print -P "  %F{green}ghst help%f           this help"
+      ;;
+    fonts|font)                   ghostty +list-fonts "$@" ;;
+    keys|key|binds|bind|kbs|kb)   ghostty +list-keybinds "$@" ;;
+    themes|theme)                 ghostty +list-themes "$@" ;;
+    colors|color)                 ghostty +list-colors "$@" ;;
+    *)
+      print -u2 -P "%F{red}ghst: unknown command '$cmd'.%f  Try %F{green}ghst help%f."
+      return 1
+      ;;
+  esac
+}
+
+# _opa_annotate - internal: print one plugin's name + what enabling it would add
+# (alias/function counts, and whether it runs init/completion at load rather than
+# just defining aliases). Reads $VERBOSE (dynamic scope) to also dump the alias
+# definitions. Used by omz-plugin-audit.
+_opa_annotate() {
+  emulate -L zsh
+  local n=$1 file=~/.oh-my-zsh/plugins/$1/$1.plugin.zsh
+  if [[ ! -r $file ]]; then
+    print -P "  %F{green}${(r:18:)n}%f %F{242}(no built-in plugin file found)%f"
+    return
+  fi
+  local a f
+  a=$(grep -cE '^[[:space:]]*alias '                                   "$file")
+  f=$(grep -cE '^[[:space:]]*(function |[A-Za-z0-9_:.-]+[[:space:]]*\(\))' "$file")
+  local -a bits
+  (( a )) && bits+=("$a $( (( a==1 )) && print alias    || print aliases )")
+  (( f )) && bits+=("$f $( (( f==1 )) && print function || print functions )")
+  grep -qE '^[[:space:]]*(eval|source|\.[[:space:]]|compdef|autoload)\b' "$file" \
+    && bits+=("init/completion")
+  (( ${#bits} )) || bits=("no aliases/functions")
+  print -P "  %F{green}${(r:18:)n}%f %F{242}${(j: · :)bits}%f"
+  [[ -n $VERBOSE ]] && grep -E '^[[:space:]]*alias ' "$file" | sed 's/^[[:space:]]*/        /'
+}
+
+# omz-plugin-audit - Suggest omz plugins for tools you've installed, or inspect any plugin
+# Usage: omz-plugin-audit [-v|--verbose] [plugin ...]
+#   (no args)     List built-in omz plugins that are NOT enabled but whose name
+#                 matches a Homebrew formula/cask you have installed, each with
+#                 what enabling it would add (alias/function counts, init/completion).
+#   plugin ...    Inspect the named plugin(s) directly instead (any plugin, whether
+#                 or not it's installed/enabled) — same annotation.
+#   -v|--verbose  Also print the actual alias definitions each plugin provides.
+# Answers not just "which plugins match my tools" but "what would each give me,"
+# so the pure alias-dumps are easy to skip. Set math mirrors the one-liner:
+#   (omz plugin list  −  omz plugin list --enabled)  ∩  (brew formula ∪ cask)
+omz-plugin-audit() {
+  emulate -L zsh
+  setopt localoptions
+
+  local -a names
+  local VERBOSE=
+  while (( $# )); do
+    case "$1" in
+      -v|--verbose) VERBOSE=1; shift ;;
+      -h|--help)
+        print "Usage: omz-plugin-audit [-v|--verbose] [plugin ...]"
+        print "  no args → suggest plugins for your installed tools; args → inspect those plugins."
+        return 0 ;;
+      -*) print -u2 -P "%F{red}omz-plugin-audit: unknown option '$1'%f"; return 1 ;;
+      *)  names+=("$1"); shift ;;
+    esac
+  done
+
+  # Explicit inspect mode.
+  if (( ${#names} )); then
+    print -P "%B%F{cyan}Plugin details%f%b"
+    local n; for n in $names; do _opa_annotate "$n"; done
+    return 0
+  fi
+
+  command -v omz  >/dev/null 2>&1 || { print -u2 -P "%F{red}omz not available in this shell.%f"; return 1 }
+  command -v brew >/dev/null 2>&1 || { print -u2 -P "%F{red}brew not found.%f"; return 1 }
+
+  local strip='s/\x1b\[[0-9;]*m//g'
+  local -a all enabled installed candidates
+  all=(${(f)"$(omz plugin list 2>/dev/null | sed $strip | sort -u)"})
+  enabled=(${(f)"$(omz plugin list --enabled 2>/dev/null | sed $strip | sort -u)"})
+  installed=(${(f)"$({ brew list --formula; brew list --cask; } 2>/dev/null | sort -u)"})
+
+  local -A en inst
+  local x
+  for x in $enabled;   do en[$x]=1;   done
+  for x in $installed; do inst[$x]=1; done
+  for x in $all; do
+    (( ${+en[$x]} ))   && continue     # already enabled
+    (( ${+inst[$x]} )) || continue     # not an installed tool
+    candidates+=$x
+  done
+
+  if (( ! ${#candidates} )); then
+    print -P "%F{242}No disabled built-in plugins match a Homebrew-installed tool — nothing to suggest.%f"
+    return 0
+  fi
+
+  print -P "%B%F{cyan}omz plugins for tools you have installed (not currently enabled)%f%b"
+  print -P "%F{242}enable via plugins=(…) in dot_zshrc.tmpl · prefer learning your own aliases over dumping these%f"
+  print
+  local n; for n in ${(o)candidates}; do _opa_annotate "$n"; done
+  print
+  print -P "%F{242}inspect one in depth:  omz-plugin-audit -v <name>%f"
 }
 
 # y — yazi with directory-follow: browse around, and quitting with `q` cd's the

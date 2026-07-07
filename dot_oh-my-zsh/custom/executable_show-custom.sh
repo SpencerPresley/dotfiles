@@ -5,8 +5,14 @@
 ALIASES_FILE=~/.oh-my-zsh/custom/aliases.zsh
 FUNCTIONS_FILE=~/.oh-my-zsh/custom/functions.zsh
 
-# Bold headers when attached to a terminal; plain when piped/redirected.
-if [ -t 1 ]; then BOLD=$'\033[1m'; RESET=$'\033[0m'; else BOLD=""; RESET=""; fi
+# Color when attached to a terminal; plain when piped/redirected. Matches the
+# `ics --help` palette: bold-cyan headers, green command names, dim hints.
+if [ -t 1 ]; then
+  BOLD=$'\033[1m'; RESET=$'\033[0m'
+  CYAN=$'\033[36m'; GREEN=$'\033[32m'; DIM=$'\033[2m'
+else
+  BOLD=""; RESET=""; CYAN=""; GREEN=""; DIM=""
+fi
 
 # --- Pass 1: find the widest alias name so every description lines up in one
 #     uniform column across all sections (functions don't stretch it). ---
@@ -20,18 +26,20 @@ done < "$ALIASES_FILE"
 (( maxw < 4 )) && maxw=4
 descindent=$((maxw + 4))   # 2 leading spaces + name column + 2 spaces
 
-# print_row NAME DESC — inline if NAME fits the column, else wrap DESC underneath
+# print_row NAME DESC — inline if NAME fits the column, else wrap DESC underneath.
+# Padding is computed separately from the color codes so the invisible ANSI bytes
+# don't throw off column alignment (printf's %-Ns would count them as width).
 print_row() {
   if (( ${#1} <= maxw )); then
-    printf "  %-${maxw}s  %s\n" "$1" "$2"
+    printf "  %s%s%s%*s  %s\n" "$GREEN" "$1" "$RESET" "$(( maxw - ${#1} ))" "" "$2"
   else
-    printf "  %s\n" "$1"
+    printf "  %s%s%s\n" "$GREEN" "$1" "$RESET"
     printf "%*s%s\n" "$descindent" "" "$2"
   fi
 }
 
 # ---- Aliases ----
-echo "${BOLD}=== Custom Aliases ===${RESET}"
+echo "${BOLD}${CYAN}=== Custom Aliases ===${RESET}"
 echo
 
 first_section=1
@@ -40,7 +48,7 @@ while IFS= read -r line; do
   if [[ "$line" =~ ^#\ ([A-Za-z][A-Za-z0-9/]+)$ ]]; then
     [[ $first_section -eq 0 ]] && echo   # blank line between sections
     first_section=0
-    printf "%s%s%s\n" "$BOLD" "${BASH_REMATCH[1]}" "$RESET"
+    printf "%s%s%s%s\n" "$BOLD" "$CYAN" "${BASH_REMATCH[1]}" "$RESET"
   # Aliases with descriptions: alias name="..."  # description
   elif [[ "$line" =~ ^alias\ ([^=]+)=.*\#\ (.+)$ ]]; then
     print_row "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
@@ -49,7 +57,7 @@ done < "$ALIASES_FILE"
 
 # ---- Functions ----
 echo
-echo "${BOLD}=== Custom Functions ===${RESET}"
+echo "${BOLD}${CYAN}=== Custom Functions ===${RESET}"
 echo
 
 # Format: # func-name - description, then # Usage: ..., then func-name() {

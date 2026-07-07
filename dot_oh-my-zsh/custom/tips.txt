@@ -1,5 +1,5 @@
 ==============================================================================
-  SHELL CHEATSHEET                          run:  cheatsheet   (or: chtsht)
+  SHELL CHEATSHEET                                       run:  tips  ·  help
 ==============================================================================
 LEFT Option = Alt on this machine (macos-option-as-alt=left). Where this says
 "Alt", press LEFT Option. Right Option still types special characters.

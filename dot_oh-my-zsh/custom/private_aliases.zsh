@@ -10,13 +10,17 @@
 # are also displayed to group related aliases.
 
 # Git
+# g/gss/gsb are vendored from the oh-my-zsh git plugin (dropped from plugins=());
+# the rest are my own. git tab-completion is zsh's own _git, not the plugin.
+alias g="git"  # git
 alias gs="git status"  # show git status
+alias gss="git status --short"  # short/porcelain status
+alias gsb="git status --short --branch"  # short status + branch header
 alias gb="git branch --sort=-committerdate"  # list branches by recent commit
 alias gc="git checkout"  # checkout branch/file
 alias gl="git log --oneline -20"  # show last 20 commits (oneline)
 alias gd="git diff"  # show unstaged changes
 alias gds="git diff --staged"  # show staged changes
-alias force="git push --force-with-lease"  # safe force push
 
 # Node/Bun
 alias nfresh="rm -rf node_modules package-lock.json && npm i"  # clean reinstall (npm)
@@ -28,9 +32,6 @@ alias dotfiles="chezmoi cd"  # cd to chezmoi dotfiles dir
 
 # Editor
 alias vim="nvim"  # use neovim
-
-# SSH
-alias ssh-config="nvim ~/.ssh/config"  # edit ssh config
 
 # Listing
 # eza-backed listings under an 'e' prefix (leaves real `ls` untouched, so it
@@ -52,9 +53,8 @@ alias aria-start='aria2c --conf-path=~/.config/aria2/aria2.conf'  # start aria2 
 alias tc='tcopy'  # run a command and copy its command+output to clipboard (see functions)
 
 # Help
-alias als='aliases'  # list custom aliases + functions (alias of aliases)
-alias chtsht='cheatsheet'  # shell tooling cheatsheet (alias of cheatsheet)
-alias cs='cheatsheet'  # shell tooling cheatsheet (short)
+# tips + help are functions (see private_functions.zsh); no aliases needed.
+alias als='aliases'  # list your custom aliases + functions
 
 # Skills
 alias ics='install-codex-skills'  # install a skills repo into a project for Codex (default: superpowers; see functions)

@@ -2,11 +2,11 @@
 # over plugin bindings (notably dirhistory + fzf). To disable vi mode, comment
 # out the `bindkey -v` + KEYTIMEOUT lines below; everything else is harmless.
 #
-# Cheatsheet tags: a `#:: Title` line opens a section in `cheatsheet`, and a
+# Tips tags: a `#:: Title` line opens a section in `tips`, and a
 # bindkey carrying a trailing `#: description` becomes a row under it (the key
 # name is auto-derived from the sequence, so it can't be mislabeled). Untagged
 # binds don't appear. show-keys.sh does the parsing; see functions.zsh's
-# cheatsheet(). Tag one binding per key (the viins/insert one); the vicmd/emacs
+# tips(). Tag one binding per key (the viins/insert one); the vicmd/emacs
 # duplicates stay untagged so each key shows once.
 
 # ── Reclaim Option-F / Option-B for word motion ──────────────────────────────

@@ -202,12 +202,6 @@ export MANPATH="$HOME/.local/share/man:$MANPATH"
 export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib"
 {{ end -}}
 
-# Workaround for claudemem bug: index command checks for OpenRouter key
-# even when configured to use Ollama. Dummy value bypasses the check.
-export OPENROUTER_API_KEY=dummy
-
-alias claude-mem='bun "/Users/spencer/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
-
 # mostly for uv using right venv when not in a
 # dir with a pyproject.toml and rather
 # just a requirements.txt and a venv

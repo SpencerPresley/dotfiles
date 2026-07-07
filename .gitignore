@@ -6,3 +6,10 @@ dot_git/
 # with a trailing slash, which would make the opt-out below a no-op.
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# Machine-local Ghostty overrides. Untracked on purpose: fiddle with font/theme
+# here without committing, promote to the tracked defaults in config.tmpl only
+# when you decide on a new default. chezmoi still reads it (it's .chezmoidata,
+# not git) and renders the values inline into ~/.config/ghostty/config — no
+# file is placed on the machine.
+.chezmoidata/ghostty-local.toml

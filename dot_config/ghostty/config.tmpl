@@ -32,13 +32,24 @@ desktop-notifications = true
 progress-style = true
 link-previews = true
 
-# Per-machine overrides — declared in .chezmoidata/ghostty.yaml keyed by
-# hostname and rendered below at chezmoi apply time, so every machine's
-# settings stay visible in the repo. Scalars simply override (last value
-# wins); YAML-list values get an automatic reset line first, because ghostty
-# list options (font-family, keybind, palette, …) append instead of replace.
-{{- $overrides := dig .chezmoi.hostname (dict) .ghostty.overrides }}
-{{- range $key, $value := $overrides }}
+# Machine-local overrides. To change font/theme/etc on THIS machine without
+# committing, create .chezmoidata/ghostty-local.toml (gitignored — see the repo
+# .gitignore) with a [ghostty.local] table. chezmoi merges it into template data
+# and renders the values inline BELOW at apply time; nothing is placed on the
+# machine, and ~/.config/ghostty/config stays the single source. Example:
+#
+#   [ghostty.local]
+#   font-size = 17
+#   theme = "Dracula"
+#   font-family = ["Monaspace Neon", "Symbols Nerd Font Mono"]
+#
+# Scalars override (ghostty last-value-wins). List values (font-family, keybind,
+# palette, …) emit a reset line first, because ghostty appends to list options
+# rather than replacing — so a font-family override must re-list Symbols Nerd
+# Font Mono or you lose icon glyphs. Promote a value to the tracked default by
+# editing the plain lines above and committing.
+{{- $local := dig "ghostty" "local" (dict) . }}
+{{- range $key, $value := $local }}
 {{- if kindIs "slice" $value }}
 {{ $key }} =
 {{- range $value }}

@@ -15,6 +15,11 @@ return {
       { "<leader>w", group = "Workspace" },
       { "<leader>r", group = "Rename" },
       { "<leader>b", group = "Buffer" },
+      { "<leader>h", group = "Hunks (Git)" },
+      { "<leader>t", group = "Toggle" },
+      { "<leader>s", group = "Split / Resize" },
+      { "<leader>q", group = "Session" },
+      { "<leader>a", group = "AI / Claude" },
     },
   },
   keys = {

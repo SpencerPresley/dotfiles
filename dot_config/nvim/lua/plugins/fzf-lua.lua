@@ -86,5 +86,12 @@ return {
       end,
       desc = "FZF Resume last search",
     },
+    {
+      "<leader>fk",
+      function()
+        require("fzf-lua").keymaps()
+      end,
+      desc = "FZF Keymaps (searchable cheatsheet)",
+    },
   },
 }

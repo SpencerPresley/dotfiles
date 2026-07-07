@@ -1,0 +1,13 @@
+# Managed by chezmoi (source: dot_npmrc)
+#
+# allow-scripts: acknowledge install/lifecycle scripts we've vetted so npm 11
+# stops warning about them. This is an allowlist only -- it does NOT block
+# anything not listed (that needs strict-allow-scripts, which we leave off), so
+# unvetted packages still run-and-warn as a supply-chain signal.
+#   tree-sitter-cli  -> downloads its prebuilt binary (legit, required)
+#   @google/genai    -> transitive under pi; preinstall is a literal no-op echo
+#   protobufjs       -> transitive under pi; harmless codegen postinstall
+# NOTE: if a private registry is ever added, `npm login` will write auth tokens
+# here -- convert this to a .tmpl sourcing the token from 1Password first.
+allow-scripts=tree-sitter-cli,@google/genai,protobufjs
+fund=false

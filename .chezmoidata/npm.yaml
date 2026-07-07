@@ -1,0 +1,14 @@
+# Global npm CLIs, installed/updated by
+# .chezmoiscripts/run_onchange_after_13-npm-global-clis.sh.tmpl
+#
+# Pinned exact versions -> reproducible across machines. Bump a version here
+# and `chezmoi apply` re-runs the onchange script to switch to it. Add a new
+# entry to install a new CLI. Removing an entry does NOT uninstall it (npm
+# doesn't track this list); run `npm uninstall -g <pkg>` by hand for that.
+#
+# Names must be exact (no ^/~ ranges) since they render straight into
+# `npm install -g <name>@<version>`.
+npmGlobals:
+  "@earendil-works/pi-coding-agent": "0.80.3"
+  "@playwright/cli": "0.1.15"
+  tree-sitter-cli: "0.26.10"

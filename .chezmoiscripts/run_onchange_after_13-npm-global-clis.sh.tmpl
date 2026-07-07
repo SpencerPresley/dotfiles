@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+
+# Install/update global npm CLIs pinned in .chezmoidata/npm.yaml. Versions are
+# rendered inline below, so bumping one there changes this script's content and
+# chezmoi re-runs it (run_onchange). npm install -g <pkg>@<ver> overwrites any
+# existing global version, so this doubles as the updater.
+
+if ! command -v npm >/dev/null 2>&1; then
+    echo "==> npm not found on PATH; skipping global npm CLIs." >&2
+    exit 0
+fi
+
+echo "==> Installing/updating global npm CLIs..."
+{{ range $pkg, $ver := .npmGlobals -}}
+echo "    {{ $pkg }}@{{ $ver }}"
+npm install -g --no-fund "{{ $pkg }}@{{ $ver }}"
+{{ end -}}
+echo "==> Global npm CLIs complete."

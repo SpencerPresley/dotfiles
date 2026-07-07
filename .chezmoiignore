@@ -1,0 +1,4 @@
+# Lazy.nvim's resolved plugin lockfile — generated state, rewritten on every
+# plugin install/update. Tracking it just creates chezmoi conflicts, and the
+# auto-update checker means versions aren't pinned anyway. Let Lazy own it.
+.config/nvim/lazy-lock.json

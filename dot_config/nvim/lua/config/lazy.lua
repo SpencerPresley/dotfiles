@@ -38,7 +38,7 @@ require("lazy").setup({
     },
   },
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "catppuccin" } },
+  install = { colorscheme = { "monokai-pro" } },
   -- automatically check for plugin updates
   checker = { enabled = true },
 })

@@ -19,7 +19,7 @@ return {
 
     require("lualine").setup({
       options = {
-        theme = "auto",
+        theme = "monokai-pro",
         icons_enabled = true,
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },

@@ -59,60 +59,30 @@ return {
   -- mini.bufremove, used above to close buffers without wrecking the layout.
   dependencies = { "nvim-mini/mini.nvim" },
   keys = keys,
-  config = function()
-    -- ROOT ISSUE: catppuccin runs transparent_background=true, so bufferline
-    -- tabs inherit NO fill and render as bare floating text -- nothing reads as
-    -- a "tab". Fix = give the tabline explicit OPAQUE backgrounds from the
-    -- active catppuccin palette: dark gutter, darker inactive tab, lighter
-    -- active tab. slant then has real bg colors to draw its angles from.
-    local ok, palettes = pcall(require, "catppuccin.palettes")
-    local c = ok and palettes.get_palette() or {}
-    local crust  = c.crust    or "#11111b" -- gutter / empty fill (darkest)
-    local mantle = c.mantle   or "#181825" -- inactive tab
-    local base   = c.base     or "#1e1e2e" -- active tab (lightest)
-    local text   = c.text     or "#cdd6f4"
-    local sub    = c.subtext0 or "#a6adc8"
-    local dim    = c.overlay0 or "#6c7086"
-    local accent = c.blue     or "#89b4fa"
-
-    require("bufferline").setup({
-      options = {
-        mode = "buffers",
-        numbers = "none", -- clean labels (<leader>b1..9 still work)
-        diagnostics = "nvim_lsp",
-        diagnostics_update_on_event = true,
-        always_show_bufferline = false, -- hide the strip when only one buffer is open
-        separator_style = "slant",
-        indicator = { style = "none" }, -- slant marks the active tab by its lighter fill
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        truncate_names = false, -- full names, no `symlink_AGENTS.md…`
-        max_name_length = 40,
-        -- Reserve the sidebar column so the tabline never draws over nvim-tree.
-        offsets = {
-          {
-            filetype = "NvimTree",
-            text = "File Explorer",
-            text_align = "left",
-            separator = true,
-          },
+  opts = {
+    options = {
+      mode = "buffers",
+      numbers = "none", -- clean labels (<leader>b1..9 still work)
+      diagnostics = "nvim_lsp",
+      diagnostics_update_on_event = true,
+      always_show_bufferline = false, -- hide the strip when only one buffer is open
+      separator_style = "slant", -- opaque theme gives the slant real bg colors
+      show_buffer_close_icons = false,
+      show_close_icon = false,
+      truncate_names = false, -- full names, no `symlink_AGENTS.md…`
+      max_name_length = 40,
+      -- Reserve the sidebar column so the tabline never draws over nvim-tree.
+      offsets = {
+        {
+          filetype = "NvimTree",
+          text = "File Explorer",
+          text_align = "left",
+          separator = true,
         },
       },
-      -- Opaque fills so tabs actually look like tabs (bufferline derives the
-      -- slant separator colors from these background values automatically).
-      highlights = {
-        fill               = { bg = crust },
-        background         = { fg = dim,  bg = mantle, italic = false }, -- inactive
-        buffer_visible     = { fg = sub,  bg = mantle, italic = false },
-        buffer_selected    = { fg = text, bg = base,   bold = true, italic = false },
-        diagnostic_selected     = { fg = text, bg = base, bold = true },
-        hint_selected           = { fg = accent, bg = base, bold = true },
-        info_selected           = { fg = accent, bg = base, bold = true },
-        warning_selected        = { bg = base, bold = true },
-        error_selected          = { bg = base, bold = true },
-        modified_selected       = { bg = base },
-        duplicate_selected      = { fg = text, bg = base, italic = false },
-      },
-    })
-  end,
+    },
+    -- No custom highlights: the colorscheme (monokai-pro) themes bufferline.
+    -- Because monokai-pro is opaque, tabs get real backgrounds automatically --
+    -- this is what finally makes the tabs read like the mockup.
+  },
 }

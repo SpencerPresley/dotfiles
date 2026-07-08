@@ -1,6 +1,6 @@
 -- Load server configurations
 require("servers.lua_ls")
-require("servers.pyright")
+require("servers.pyrefly")
 require("servers.vtsls")
 require("servers.gopls")
 require("servers.bashls")
@@ -13,7 +13,7 @@ require("servers.yamlls")
 
 -- Enable all servers
 vim.lsp.enable("lua_ls")
-vim.lsp.enable("basedpyright")
+vim.lsp.enable("pyrefly")
 vim.lsp.enable("vtsls")
 vim.lsp.enable("gopls")
 vim.lsp.enable("bashls")

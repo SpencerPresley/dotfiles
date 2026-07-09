@@ -27,6 +27,9 @@ alias nfresh="rm -rf node_modules package-lock.json && npm i"  # clean reinstall
 alias nremove="rm -rf node_modules package-lock.json"  # remove node_modules + lockfile
 alias bfresh="rm -rf node_modules bun.lockb && bun i"  # clean reinstall (bun)
 
+# Python
+alias python='/opt/homebrew/bin/python3'  # Python 3 (Homebrew)
+
 # Navigation
 alias dotfiles="chezmoi cd"  # cd to chezmoi dotfiles dir
 

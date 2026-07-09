@@ -1,3 +1,6 @@
+# Taps / external commands
+tap "domt4/autoupdate", trusted: { command: "autoupdate" }
+
 # Core tools
 brew "bat"
 brew "eza"

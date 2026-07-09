@@ -1,0 +1,76 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Background `brew update` every 12h via launchd (domt4/autoupdate tap).
+# Metadata updates only -- deliberately no --upgrade: silently upgrading running
+# services (colima, docker, postgres, redis) or open casks mid-session breaks
+# things at the worst possible time. Upgrading stays a manual, conscious act.
+#
+# Brewfile hash: {{ include "Brewfile" | sha256sum }}
+
+echo "==> Configuring Homebrew autoupdate..."
+
+if ! command -v brew >/dev/null 2>&1; then
+    echo "    brew not found; skipping."
+    exit 0
+fi
+
+LABEL="com.github.domt4.homebrew-autoupdate"
+PLIST_PATH="$HOME/Library/LaunchAgents/${LABEL}.plist"
+RUNNER_PATH="$HOME/Library/Application Support/${LABEL}/brew_autoupdate"
+INTERVAL_SECONDS=43200
+TAP="domt4/autoupdate"
+COMMAND_TARGET="${TAP}/autoupdate"
+
+if brew tap | grep -qx "homebrew/autoupdate"; then
+    echo "    Removing stale homebrew/autoupdate tap..."
+    brew untap homebrew/autoupdate || true
+fi
+
+if ! brew tap | grep -qx "$TAP"; then
+    echo "    Tapping $TAP..."
+    brew tap "$TAP"
+fi
+
+echo "    Trusting $COMMAND_TARGET command..."
+brew trust --command "$COMMAND_TARGET"
+
+needs_rebuild=false
+
+if [ ! -f "$PLIST_PATH" ] || [ ! -x "$RUNNER_PATH" ]; then
+    needs_rebuild=true
+elif grep -Eq '/Taps/[Hh]omebrew/homebrew-autoupdate' "$RUNNER_PATH"; then
+    echo "    Existing runner still references the old homebrew/autoupdate tap."
+    needs_rebuild=true
+fi
+
+current_interval=""
+if [ -f "$PLIST_PATH" ]; then
+    current_interval="$(/usr/libexec/PlistBuddy -c "Print :StartInterval" "$PLIST_PATH" 2>/dev/null || true)"
+fi
+
+if [ "$current_interval" != "$INTERVAL_SECONDS" ]; then
+    needs_rebuild=true
+fi
+
+if [ "$needs_rebuild" = true ]; then
+    echo "    Rebuilding Homebrew autoupdate LaunchAgent..."
+    brew autoupdate delete >/dev/null 2>&1 || true
+    rm -f "$PLIST_PATH"
+    rm -f "$RUNNER_PATH"
+    brew autoupdate start "$INTERVAL_SECONDS"
+    echo "    Autoupdate started (every 12h)."
+else
+    status_output="$(brew autoupdate status 2>&1 || true)"
+    if echo "$status_output" | grep -qi "not configured"; then
+        brew autoupdate start "$INTERVAL_SECONDS"
+        echo "    Autoupdate started (every 12h)."
+    elif launchctl list "$LABEL" >/dev/null 2>&1; then
+        echo "    Autoupdate already configured."
+    else
+        echo "    Loading existing LaunchAgent..."
+        launchctl load "$PLIST_PATH"
+    fi
+fi
+{{- end }}

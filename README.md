@@ -44,5 +44,6 @@ After bootstrap: open a new terminal, then run `tmux` and press `prefix + I` to 
 - TPM (tmux plugin manager)
 - Bun, Rust, uv
 - Docker Compose CLI plugin (macOS)
+- Homebrew autoupdate LaunchAgent (metadata updates only)
 - Ollama (native install, migrates from Homebrew if needed)
 - Ollama environment LaunchAgent (env vars from `.chezmoidata/ollama.yaml`)

@@ -62,7 +62,7 @@ return {
   opts = {
     options = {
       mode = "buffers",
-      numbers = "none", -- clean labels (<leader>b1..9 still work)
+      numbers = "ordinal", -- show each tab's ordinal = the N in <leader>bN (muscle memory)
       diagnostics = "nvim_lsp",
       diagnostics_update_on_event = true,
       always_show_bufferline = false, -- hide the strip when only one buffer is open

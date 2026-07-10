@@ -103,4 +103,8 @@ else
     -- File Explorer
     vim.keymap.set("n", "<leader>m", "<Cmd>NvimTreeFocus<CR>", { desc = "Focus on file explorer" })
     vim.keymap.set("n", "<leader>e", "<Cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
+
+    -- Live tail: follow external file changes in-buffer (tail -f). See utils/tail.lua.
+    require("utils.tail").setup() -- :Tail / :TailStop / :TailToggle
+    vim.keymap.set("n", "<leader>tl", "<Cmd>TailToggle<CR>", { desc = "Toggle live tail (follow file)" })
 end

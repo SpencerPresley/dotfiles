@@ -239,3 +239,6 @@ case $PROMPT_ENGINE in
     [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
     ;;
 esac
+
+# Silence '%' at the end of an output with no new line character
+PROMPT_EOL_MARK=''

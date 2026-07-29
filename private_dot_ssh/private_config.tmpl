@@ -104,6 +104,16 @@ Host neucic-reverse-proxy
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes
 
+# --- gw bastion (GovCloud reverse proxy, sibling of the two above) ---
+# Terraform-built template box awaiting product assignment. EC2 public IPv4
+# (an EIP), not a secret. Which product/domain it fronts is deliberately NOT
+# named here (public repo) — see the work repo's infra/reverse-proxy/README.md.
+Host gw-proxy
+  HostName 16.65.82.10
+  User ec2-user
+  IdentityFile ~/.ssh/id_ed25519.pub
+  IdentitiesOnly yes
+
 # --- Industrial Defender IDC sensor (PCAP source for the CrunchAtlas/ID integration) ---
 # Appliance with a custom ID CLI: `exec bash` opens a shell (root password). Capture PCAPs
 # from the CLI with `exec tcpdump`; replay with `exec pcap_replay <file>`. Password auth only

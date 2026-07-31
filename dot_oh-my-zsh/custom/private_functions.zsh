@@ -667,3 +667,46 @@ cc-settings-ref() {
     "${EDITOR:-nvim}" "$ref"
   fi
 }
+
+# ghostty-reload-shell - Reload Ghostty's shell integration here, no app restart
+# Usage: ghostty-reload-shell
+# GHOSTTY_SHELL_FEATURES is exported into the shell by the Ghostty *process*, from
+# the config it read at launch — so editing shell-integration-features never reaches
+# a new tab, because that tab is a new surface in the same process holding the same
+# in-memory config. The GUI path is cmd+shift+, (reload_config) followed by a new
+# tab. This is the no-GUI path: it replays Ghostty's own injection by pointing
+# ZDOTDIR at the .zshenv shim that loads the integration and then restores ZDOTDIR.
+# The feature list comes from `ghostty +show-config`, which reads the config files
+# rather than the running process, so an edit takes effect before any reload.
+# Replaces the shell via exec — $PWD survives, in-memory history does not.
+ghostty-reload-shell() {
+  emulate -L zsh
+
+  if [[ -z "$GHOSTTY_RESOURCES_DIR" ]]; then
+    print -u2 "ghostty-reload-shell: not running under Ghostty (GHOSTTY_RESOURCES_DIR unset)"
+    return 1
+  fi
+  local shim="$GHOSTTY_RESOURCES_DIR/shell-integration/zsh"
+  if [[ ! -r "$shim/.zshenv" ]]; then
+    print -u2 "ghostty-reload-shell: no shell-integration shim at $shim"
+    return 1
+  fi
+
+  local ghostty="${GHOSTTY_BIN_DIR:+$GHOSTTY_BIN_DIR/ghostty}"
+  [[ -x "$ghostty" ]] || ghostty=$(command -v ghostty) || {
+    print -u2 "ghostty-reload-shell: ghostty binary not found; can't read the config"
+    return 1
+  }
+
+  # Anything unparsable here just means we fall back to Ghostty's built-in
+  # defaults rather than the configured set, so warn instead of aborting.
+  local features
+  features=$("$ghostty" +show-config | command awk -F' = ' '/^shell-integration-features/{print $2}')
+  [[ -n "$features" ]] || print -u2 "ghostty-reload-shell: no shell-integration-features in config, using defaults"
+
+  local -a envargs
+  envargs=(-u GHOSTTY_ZSH_ZDOTDIR "ZDOTDIR=$shim")
+  [[ -n "$features" ]] && envargs+=("GHOSTTY_SHELL_FEATURES=$features")
+
+  exec env "${envargs[@]}" zsh
+}

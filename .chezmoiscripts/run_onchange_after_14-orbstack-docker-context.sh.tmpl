@@ -1,0 +1,28 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Stop OrbStack from claiming the Docker CLI context.
+#
+# OrbStack rewrites "currentContext" in ~/.docker/config.json every time it
+# starts, so one throwaway use of it leaves `docker` pointed at
+# ~/.orbstack/run/docker.sock. That socket disappears the moment OrbStack
+# stops, and every docker command then fails against a dead path while colima
+# is sitting there running fine. docker.set_context=false leaves the context
+# alone; opt into OrbStack per-invocation with `docker context use orbstack`
+# or DOCKER_CONTEXT=orbstack.
+#
+# Done through the CLI rather than as a managed file on purpose: the setting
+# persists to ~/.orbstack/vmconfig.json, which OrbStack rewrites with live VM
+# state (cpu, memory, disk allocations), so chezmoi would fight it on every
+# apply for the same reason ~/.docker did.
+
+command -v orb >/dev/null 2>&1 || exit 0
+
+if [ "$(orb config get docker.set_context 2>/dev/null)" = "false" ]; then
+  exit 0
+fi
+
+echo "==> Telling OrbStack not to take over the Docker context..."
+orb config set docker.set_context false
+{{- end }}

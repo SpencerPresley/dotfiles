@@ -15,7 +15,29 @@ cursor-style = block
 cursor-style-blink = true
 cursor-click-to-move = true
 shell-integration = zsh
-shell-integration-features = no-cursor,sudo
+# Every feature listed explicitly, including the ones already on by default
+# (`title`, `path`) — omitted features inherit the upstream default, and that
+# default can move between releases. `ghostty +show-config --default` prints the
+# current one; on 1.3.1 it's `cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path`.
+#
+# sudo: wraps sudo as `sudo --preserve-env=TERMINFO`. Ghostty sets TERMINFO to
+#   the app bundle (/Applications/Ghostty.app/Contents/Resources/terminfo) and
+#   xterm-ghostty exists nowhere else on this box — `env -u TERMINFO infocmp -x
+#   xterm-ghostty` fails — so without this, sudoers' env_reset drops TERMINFO and
+#   `sudo vim`/`sudo -s` land on an unknown terminal type. Keep it on.
+# ssh-env: adds `-o SetEnv COLORTERM=truecolor` and
+#   `-o SendEnv TERM_PROGRAM TERM_PROGRAM_VERSION` (remote sshd must AcceptEnv them).
+# ssh-terminfo: pushes `infocmp -0 -x xterm-ghostty` through a ControlMaster
+#   connection and runs `tic -x -` on the remote, so TERM stays xterm-ghostty
+#   instead of degrading to xterm-256color. Needs tic on the remote; on failure
+#   it warns and falls back. Successes are cached — `ghostty +ssh-cache` lists,
+#   `--remove=host` forces a reinstall.
+#
+# Both ssh features work by defining an `ssh` zsh function, so they cover
+# interactive `ssh` only — not scp/rsync/git-over-ssh or ssh from scripts.
+# `command ssh <host>` bypasses the wrapper; useful for `idc`, whose custom
+# appliance CLI is not a POSIX shell and will choke on the tic probe.
+shell-integration-features = no-cursor,sudo,title,ssh-env,ssh-terminfo,path
 mouse-hide-while-typing = true
 window-title-font-family = JetBrainsMonoNL Nerd Font Mono
 macos-option-as-alt = left

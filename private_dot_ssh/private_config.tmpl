@@ -132,9 +132,15 @@ Host gw-proxy
 # (no pubkey login on the appliance). Creds in 1Password ("Industrial Defender — IDC" /
 # "— IDCM"); host IPs, the IDCM web-UI URL, and the whitelisted-egress-IP caveat live in
 # the private runbook tracker/industrial-defender/idc-environment-access.md — not here (public repo).
+# `Tag no-ghostty-ssh`: opt this host out of Ghostty's ssh() wrapper (see
+# ~/.oh-my-zsh/custom/ghostty.zsh). ssh-terminfo would pipe a terminfo blob into
+# `tic -x -` on the far end, which assumes a POSIX shell — this appliance answers
+# with its own CLI, and being password-only the probe also costs an extra prompt.
+# Tag is client-side (OpenSSH 8.9+), never sent to the remote.
 Host idc
   HostName {{ onepasswordRead "op://Personal/idc-ip/credential" }}
   User admin
+  Tag no-ghostty-ssh
   PubkeyAuthentication no
   PreferredAuthentications password,keyboard-interactive
   ServerAliveInterval 30

@@ -148,3 +148,10 @@ Host idc
   ControlMaster auto
   ControlPath ~/.ssh/cm-%r@%h:%p
   ControlPersist 10m
+
+# Backup for atlascyber-backend 
+Host beast-backup
+  HostName localhost
+  Port 22001
+  User atlascyber
+  ProxyJump atlascyber-reverse-proxy

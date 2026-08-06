@@ -116,6 +116,35 @@ Host neucic-reverse-proxy
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes
 
+# --- NEUCIC prod backend "CrunchDev", via the NEUCIC reverse proxy ---
+# CrunchDev has no public SSH: its public IP (64.223.131.115) is the site's
+# Ubiquiti edge router, not the box. A reverse tunnel exposes it on the
+# bastion's localhost:22000, so this entry only works while that tunnel is
+# up — when it wedges there is NO remote path in (tracker issue
+# deploy-tunnel-hardening/02).
+# HostKeyAlias is REQUIRED, not cosmetic: atlascyber-backend also lands on
+# localhost:22000, and known_hosts still carries beast's keys under the bare
+# [localhost]:22000 name. Without the alias, ssh compares CrunchDev's host key
+# against beast's and hard-fails with REMOTE HOST IDENTIFICATION HAS CHANGED.
+# Password auth only (no pubkey on the box yet) — same shape as `idc` below.
+# The password is $NEUCIC_VIEJO_PW (op://Personal/neucic-viejo/password,
+# exported by dot_zshenv.tmpl). ControlMaster keeps one connection alive so
+# the password is entered once per 10 min, not once per command.
+Host neucic-backend
+  HostName localhost
+  Port 22000
+  User viejo
+  ProxyJump neucic-reverse-proxy
+  HostKeyAlias neucic-reverse-tunnel
+  StrictHostKeyChecking accept-new
+  PubkeyAuthentication no
+  PreferredAuthentications password,keyboard-interactive
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%r@%h:%p
+  ControlPersist 10m
+  ServerAliveInterval 60
+  ServerAliveCountMax 3
+
 # --- gw bastion (GovCloud reverse proxy, sibling of the two above) ---
 # Terraform-built template box awaiting product assignment. EC2 public IPv4
 # (an EIP), not a secret. Which product/domain it fronts is deliberately NOT

@@ -68,6 +68,6 @@ alias serena-init='serena-init-project'  # init serena project (see functions)
 alias serena-i='serena-init-project'  # init serena project (short)
 alias si='serena-init-project'  # init serena project (shortest)
 
-# Add 'dangerously-skip-permissions' as a mode i can switch to
-# without auto-activating it
-alias claude='claude --allow-dangerously-skip-permissions'
+# NOTE: no `claude` alias on purpose. A global flag before a subcommand breaks
+# subcommand dispatch (`claude remote-control` -> "Unknown argument: remote-control").
+# bypassPermissions is set via permissions.defaultMode in ~/.claude/settings.json instead.

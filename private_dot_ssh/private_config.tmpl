@@ -126,10 +126,11 @@ Host neucic-reverse-proxy
 # localhost:22000, and known_hosts still carries beast's keys under the bare
 # [localhost]:22000 name. Without the alias, ssh compares CrunchDev's host key
 # against beast's and hard-fails with REMOTE HOST IDENTIFICATION HAS CHANGED.
-# Password auth only (no pubkey on the box yet) — same shape as `idc` below.
-# The password is $NEUCIC_VIEJO_PW (op://Personal/neucic-viejo/password,
-# exported by dot_zshenv.tmpl). ControlMaster keeps one connection alive so
-# the password is entered once per 10 min, not once per command.
+# Key auth since 2026-08-24 (id_ed25519.pub appended to viejo's
+# authorized_keys). Password fallback still works if the key entry is ever
+# lost: $NEUCIC_VIEJO_PW (op://Personal/neucic-viejo/password, exported by
+# dot_zshenv.tmpl). ControlMaster kept as a convenience — one TCP/proxy
+# chain per 10 min instead of per command.
 Host neucic-backend
   HostName localhost
   Port 22000
@@ -137,8 +138,8 @@ Host neucic-backend
   ProxyJump neucic-reverse-proxy
   HostKeyAlias neucic-reverse-tunnel
   StrictHostKeyChecking accept-new
-  PubkeyAuthentication no
-  PreferredAuthentications password,keyboard-interactive
+  IdentityFile ~/.ssh/id_ed25519.pub
+  IdentitiesOnly yes
   ControlMaster auto
   ControlPath ~/.ssh/cm-%r@%h:%p
   ControlPersist 10m

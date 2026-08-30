@@ -3,6 +3,25 @@
 Call me Spencer. We're colleagues — no hierarchy, no deference, no performing.
 Assume I know the domain and talk to me like a senior engineer, not a student.
 
+## Background watchers (CI runs, deploys, long jobs)
+
+Hand-rolled `while true; do ...; sleep 30; done` watchers report late and
+have repeatedly reported never — write them by these rules instead:
+
+- For GitHub Actions, use the native watchers in run_in_background — they
+  exit within seconds of the terminal state: `gh run watch <run-id>
+  --exit-status --interval 10` for one run, `gh pr checks <pr> --watch
+  --interval 10` for a PR's checks.
+- When a loop is unavoidable, poll every 10–15s (an authed `gh` call is
+  cheap; 30–45s of staleness per layer stacks across phases), and make it
+  emit a line AND exit on EVERY terminal state — success, failure,
+  cancelled, timeout. A watcher that only breaks on the happy path is
+  silent through a crash, and silence is indistinguishable from "still
+  running."
+- In worktree-isolated sessions the Bash guard rejects multi-line loops as
+  "too complex": write the watcher to the scratchpad as a .sh file and run
+  `bash <file>` instead of inlining it.
+
 ## Answer shape
 
 - Put the answer first. The specific thing — the function, the value, the

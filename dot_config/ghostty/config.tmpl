@@ -4,12 +4,7 @@ font-family = Hack Nerd Font
 # future font swap (here or via a per-machine override) can't lose NF icons.
 # See docs/fonts.md in the chezmoi repo for the per-font glyph inventory.
 font-family = Symbols Nerd Font Mono
-font-style = Regular
-font-style-bold = Bold
-font-style-italic = Italic
-font-style-bold-italic = Bold Italic
-font-size = 16
-font-shaping-break = cursor
+font-size = 14
 theme = Banana Blueberry
 cursor-style = block
 cursor-style-blink = true
@@ -39,11 +34,10 @@ shell-integration = zsh
 # appliance CLI is not a POSIX shell and will choke on the tic probe.
 shell-integration-features = no-cursor,sudo,title,ssh-env,ssh-terminfo,path
 mouse-hide-while-typing = true
-window-title-font-family = JetBrainsMonoNL Nerd Font Mono
 macos-option-as-alt = left
 auto-update = check
-window-padding-x = 4
-window-padding-y = 4
+window-padding-x = 2
+window-padding-y = 2
 copy-on-select = true
 window-inherit-working-directory = true
 window-inherit-font-size = true
@@ -81,4 +75,3 @@ link-previews = true
 {{ $key }} = {{ $value }}
 {{- end }}
 {{- end }}
-

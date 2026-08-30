@@ -1,0 +1,80 @@
+==============================================================================
+  TMUX CHEATSHEET                                    run:  tmux-tips  ·  help
+==============================================================================
+PREFIX = Ctrl-a  (press Ctrl-a, release, then the key). "prefix X" below means
+that two-step chord. Ctrl-a Ctrl-a sends a literal Ctrl-a to the app inside.
+Reload after editing ~/.config/tmux/tmux.conf with:  prefix r
+
+
+windows & panes — create / split (all open in the CURRENT pane's dir)
+------------------------------------------------------------------------------
+  prefix c        new window
+  prefix |        split left/right  (vertical bar = vertical divider)
+  prefix -        split top/bottom
+  prefix m        zoom the current pane full-screen (toggle — press again to undo)
+  prefix r        reload the tmux config
+
+
+move between panes — no prefix (vim-tmux-navigator)
+------------------------------------------------------------------------------
+  Ctrl-h          move to the pane / vim split on the left
+  Ctrl-j          move down
+  Ctrl-k          move up
+  Ctrl-l          move right
+  Ctrl-\          jump to the last-used pane
+                  (seamless: the SAME keys move across vim splits and tmux panes)
+
+
+resize panes — prefix, repeatable (hold prefix once, tap keys)
+------------------------------------------------------------------------------
+  prefix h        shrink left  5
+  prefix j        shrink down  5
+  prefix k        grow up      5
+  prefix l        grow right   5
+
+
+copy mode — vi keys (scrollback + selection); tmux-yank does the clipboard
+------------------------------------------------------------------------------
+  prefix [        enter copy mode (then scroll/search with vim motions)
+  q               leave copy mode
+  /  ?            search forward / backward   ·   n / N  next / prev match
+  v               start a selection   (visual)
+  y               copy selection to the SYSTEM clipboard, then exit
+  prefix y        (outside copy mode) copy the current command line to clipboard
+  prefix Y        copy the current pane's working directory to clipboard
+
+
+sessions — sesh picker + native (fzf popup, 80x70)
+------------------------------------------------------------------------------
+  prefix T        open the sesh picker. inside it:
+                    Tab / S-Tab   move down / up
+                    ^a  all   ·  ^t  tmux   ·  ^g  configs
+                    ^x  zoxide dirs   ·  ^f  find dirs   ·  ^d  kill session
+  prefix d        detach (session keeps running; reattach with `tmux a` or sesh)
+  prefix s        native session tree   ·   prefix $  rename session
+  prefix w        window tree (all sessions)
+
+
+menus & discovery
+------------------------------------------------------------------------------
+  prefix \        tmux-menus — a navigable menu of most tmux actions
+  prefix ?        list every key binding tmux currently has (the source of truth)
+  prefix Alt-?    this cheatsheet in a scrollable popup (q / Esc closes)
+  tmux-tips       this cheatsheet in the shell
+
+
+save / restore — automatic (resurrect + continuum)
+------------------------------------------------------------------------------
+  (auto)          continuum snapshots every 30 min and restores on tmux start,
+                  including pane CONTENTS (@resurrect-capture-pane-contents on)
+  prefix C-s      save the environment right now
+  prefix C-r      restore the last saved environment
+
+
+plugins — TPM (prefix, capitals)
+------------------------------------------------------------------------------
+  prefix I        install plugins listed in tmux.conf
+  prefix U        update plugins
+  prefix Alt-u    remove plugins no longer listed
+                  versions are pinned in .chezmoiscripts/
+                  run_onchange_before_02-install-tmux-plugins.sh

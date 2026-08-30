@@ -31,14 +31,17 @@ tips() {
   fi
 }
 
-# help - Everything at a glance: your custom aliases/functions + the tooling tips
+# help - Everything at a glance: aliases/functions + tooling tips + tmux setup
 # Usage: help
-# Runs `aliases` (your `als` output) then `tips` (the tooling/keybinding guide).
+# Runs `aliases` (your `als` output), then `tips` (the tooling/keybinding guide),
+# then `tmux-tips` (this machine's tmux config & plugin bindings).
 # `help` isn't a zsh builtin (only run-help→man exists), so this claims it cleanly.
 help() {
   aliases
   print
   tips --no-footer
+  print
+  tmux-tips
 }
 
 # _tips_colorize - internal: colorize tips.txt for a terminal. Bold-cyan section
@@ -65,6 +68,23 @@ _tips_colorize() {
     }
     END{ emit(buf) }
   '
+}
+
+# tmux-tips - Quick reference for THIS machine's tmux setup (prefix, splits,
+# vim-tmux-navigator, sesh, yank, resurrect/continuum, TPM).
+# Usage: tmux-tips
+# Same shape as `tips`: prints the curated tmux-tips.txt, colorized (reusing
+# _tips_colorize) when writing to a terminal, plain when piped. The content is
+# hand-maintained to match ~/.config/tmux/tmux.conf and the pinned plugins — it
+# is NOT auto-generated, so update it when you rebind keys. `prefix ?` inside
+# tmux is the always-accurate source of truth for what's actually bound.
+tmux-tips() {
+  local f=~/.oh-my-zsh/custom/tmux-tips.txt
+  if [[ -t 1 ]]; then
+    _tips_colorize < "$f"
+  else
+    command cat "$f"
+  fi
 }
 
 # relpath - Print real path(s) relative to the current directory

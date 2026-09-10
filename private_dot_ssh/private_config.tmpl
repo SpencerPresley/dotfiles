@@ -146,6 +146,27 @@ Host neucic-backend
   ServerAliveInterval 60
   ServerAliveCountMax 3
 
+# BACKUP admin path: the same box over the supervised ssh_tunnel_22001 (its own
+# supervisor file, so a `supervisorctl update` that restarts 22000 leaves this
+# one up — proven 2026-09-10 when the first host install left 22000 stopped and
+# this was the way back in). Same key, same jump, same HostKeyAlias (it IS the
+# same host key). Rides the same Wi-Fi uplink, so it is tunnel redundancy, not
+# out-of-band access (tracker deploy-tunnel-hardening/06, /13).
+Host neucic-backend-backup
+  HostName localhost
+  Port 22001
+  User viejo
+  ProxyJump neucic-reverse-proxy
+  HostKeyAlias neucic-reverse-tunnel
+  StrictHostKeyChecking accept-new
+  IdentityFile ~/.ssh/id_ed25519.pub
+  IdentitiesOnly yes
+  ControlMaster auto
+  ControlPath ~/.ssh/cm-%r@%h:%p
+  ControlPersist 10m
+  ServerAliveInterval 60
+  ServerAliveCountMax 3
+
 # --- gw bastion (GovCloud reverse proxy, sibling of the two above) ---
 # Terraform-built template box awaiting product assignment. EC2 public IPv4
 # (an EIP), not a secret. Which product/domain it fronts is deliberately NOT

@@ -730,3 +730,39 @@ ghostty-reload-shell() {
 
   exec env "${envargs[@]}" zsh
 }
+
+# dux - Disk usage with dep/build dirs (node_modules, .venv, target…) pruned
+# Usage: dux [du args] [path ...]     e.g. dux -d1 ~/work | sort -rh
+# Neither du reads a config file: GNU du's only environment variables are
+# DU_BLOCK_SIZE/BLOCK_SIZE/BLOCKSIZE/TIME_STYLE and BSD du's is BLOCKSIZE, all
+# about output format, so an exclude list has to be re-passed on every call.
+# This is that call. Patterns come from ~/.config/du/ignore (one fnmatch glob
+# per line, matched against the entry *name*, so `node_modules` hits any depth).
+# Both implementations prune rather than hide — an ignored node_modules costs
+# zero stat() calls, which is the entire point on a tree with 200k inodes in it.
+# Prefers GNU du (coreutils' `gdu`) and falls back to BSD du's repeatable -I, so
+# it still works on a box where `brew bundle` hasn't run. -h leads so a later
+# --block-size/-k of yours wins; no file means no patterns, i.e. a plain du.
+# Not named `du` on purpose: shadowing it makes `du -sh node_modules` answer 0B,
+# and aliases don't expand in scripts, so the same command would print two
+# different numbers depending on whether a human or a script ran it.
+dux() {
+  local ignore=${DU_IGNORE_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/du/ignore}
+  local -a pats args
+  local p bin=du flag=-I
+
+  # GNU first; the gnubin symlink and `gdu` are the same coreutils binary, but
+  # the explicit path survives a PATH that predates the Homebrew shellenv.
+  for p in "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin/du" \
+           /opt/homebrew/opt/coreutils/libexec/gnubin/du \
+           /usr/local/opt/coreutils/libexec/gnubin/du; do
+    [[ -x $p ]] && { bin=$p; flag=--exclude=; break; }
+  done
+
+  [[ -r $ignore ]] && pats=(${(f)"$(command sed -e 's/[[:space:]]*$//' -e '/^[[:space:]]*#/d' -e '/^$/d' -- $ignore)"})
+  for p in $pats; do
+    [[ $flag == -I ]] && args+=(-I "$p") || args+=("--exclude=$p")
+  done
+
+  command "$bin" -h $args "$@"
+}

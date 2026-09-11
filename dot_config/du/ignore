@@ -1,0 +1,44 @@
+# Exclude patterns for `dux` (see functions.zsh). One basename glob per line;
+# both GNU du (--exclude) and BSD du (-I) match with fnmatch against the entry
+# name, not the path, so `node_modules` hits it at any depth. Blank lines and
+# `#` comments are skipped by the function before the patterns are passed on.
+#
+# Everything here is regenerable from a lockfile, a compiler, or a cache — the
+# stuff that dominates an inode count without telling you anything about what
+# you actually wrote. Excluded dirs are pruned, not merely hidden, so they cost
+# no stat() calls at all.
+
+# Version control
+.git
+
+# Node
+node_modules
+.next
+.nuxt
+.turbo
+.parcel-cache
+.svelte-kit
+
+# Python
+.venv
+venv
+__pycache__
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.tox
+*.egg-info
+
+# Rust / Go / Java
+target
+.gradle
+
+# Build output
+dist
+build
+.output
+
+# Tooling caches
+.cache
+.terraform
+.DS_Store

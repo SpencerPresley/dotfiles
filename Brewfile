@@ -17,6 +17,7 @@ brew "zoxide"
 brew "gh"
 brew "gitleaks"
 brew "htop"
+brew "ncdu"          # interactive disk-usage browser (pairs with `dux`)
 brew "jq"
 brew "ripgrep"
 brew "tree"

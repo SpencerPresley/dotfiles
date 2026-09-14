@@ -1,0 +1,25 @@
+{
+  "db": "/Users/spencer/code/docq/build/minimax-v2.db",
+  "retrieve": {
+    "rerank-model": "glm-5.2:cloud"
+  },
+  "embed": {
+    "model": "embeddinggemma:latest"
+  },
+  "build": {
+    "instance": "/Users/spencer/code/docq/corpora/aposd",
+    "model": "minimax-m3:cloud",
+    "workers": 8,
+    "build-dir": "/Users/spencer/code/docq/build/minimax-v2"
+  },
+  "enrich-questions": {
+    "instance": "/Users/spencer/code/docq/corpora/aposd",
+    "model": "minimax-m3:cloud",
+    "workers": 8,
+    "build-dir": "/Users/spencer/code/docq/build/minimax-v2"
+  },
+  "eval": {
+    "cases": "/Users/spencer/code/docq/corpora/aposd/cases.yaml",
+    "rerank-model": "glm-5.2:cloud"
+  }
+}

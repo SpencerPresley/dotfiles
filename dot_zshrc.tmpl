@@ -128,6 +128,10 @@ fi
 
 # NVM setup
 export NVM_DIR="$HOME/.nvm"
+# `nvm ls` colors: installed=cyan, system=magenta, current=bold green,
+# not-installed=light grey, LTS=bold blue. `nvm set-colors` only exports this
+# var for the current shell, so it has to live here to persist.
+export NVM_COLORS="cmGeB"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 
 # Enable bash-style completion in zsh

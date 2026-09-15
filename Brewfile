@@ -107,7 +107,6 @@ brew "ffuf"         # web fuzzer (content/param discovery)
 cask "1password"
 cask "1password-cli"
 cask "betterdisplay"
-cask "bartender"
 cask "chatgpt"
 cask "claude"
 cask "dropbox"

@@ -46,8 +46,11 @@ background-blur = 20
 desktop-notifications = true
 progress-style = true
 link-previews = true
+# Kills the traffic lights on its own (since 1.2.0); no titlebar-style needed.
 macos-window-buttons = hidden
-macos-titlebar-style = tabs
+# macos-titlebar-style is deliberately unset -> upstream default "transparent".
+# `tabs` paints the titlebar from the terminal background color, which breaks
+# down once background-opacity < 1 (see the override docs below).
 window-padding-x = 10
 window-padding-y = 8
 scrollback-limit = 25000000
@@ -64,15 +67,23 @@ scrollback-limit = 25000000
 #   theme = "Dracula"
 #   font-family = ["Monaspace Neon", "Symbols Nerd Font Mono"]
 #
-# Scalars override (ghostty last-value-wins). List values (font-family, keybind,
-# palette, …) emit a reset line first, because ghostty appends to list options
-# rather than replacing — so a font-family override must re-list Symbols Nerd
-# Font Mono or you lose icon glyphs. Promote a value to the tracked default by
-# editing the plain lines above and committing.
+# Scalars override (ghostty last-value-wins). List options (font-family, keybind,
+# palette, …) get a reset line emitted first, because ghostty appends to list
+# options rather than replacing — without the reset, `font-family =
+# "JetBrainsMono Nerd Font"` lands *third* in the fallback chain behind Hack and
+# never renders a glyph. The reset fires both for TOML arrays and for a bare
+# scalar naming a list option (see $lists below), so either spelling works; a
+# multi-value override still needs the array form. Note that a font-family
+# override must re-list Symbols Nerd Font Mono or you lose icon glyphs. Promote a
+# value to the tracked default by editing the plain lines above and committing.
+{{- /* Ghostty options that append rather than replace; `<key> =` clears them. */ -}}
+{{- $lists := dict "font-family" true "font-family-bold" true "font-family-italic" true "font-family-bold-italic" true "keybind" true "palette" true "font-feature" true "font-variation" true "config-file" true }}
 {{- $local := dig "ghostty" "local" (dict) . }}
 {{- range $key, $value := $local }}
-{{- if kindIs "slice" $value }}
+{{- if or (kindIs "slice" $value) (hasKey $lists $key) }}
 {{ $key }} =
+{{- end }}
+{{- if kindIs "slice" $value }}
 {{- range $value }}
 {{ $key }} = {{ . }}
 {{- end }}

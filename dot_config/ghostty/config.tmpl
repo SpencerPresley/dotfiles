@@ -1,8 +1,7 @@
 font-family = Hack Nerd Font
-# Icon-glyph fallback: only consulted for codepoints the primary font lacks.
-# Hack NF is a complete Nerd Font, so this is inert today — it exists so a
-# future font swap (here or via a per-machine override) can't lose NF icons.
-# See docs/fonts.md in the chezmoi repo for the per-font glyph inventory.
+# Icon-glyph fallback, consulted only for codepoints the primary font lacks.
+# Inert while Hack NF is primary; it's here so a font swap or a per-machine
+# override can't silently lose NF icons. Inventory: docs/fonts.md.
 font-family = Symbols Nerd Font Mono
 font-size = 14
 theme = Banana Blueberry
@@ -11,28 +10,23 @@ cursor-style-blink = true
 cursor-click-to-move = true
 cursor-opacity = 0.8
 shell-integration = zsh
-# Every feature listed explicitly, including the ones already on by default
-# (`title`, `path`) — omitted features inherit the upstream default, and that
-# default can move between releases. `ghostty +show-config --default` prints the
-# current one; on 1.3.1 it's `cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path`.
+# Every feature listed explicitly, including ones already on by default (`title`,
+# `path`): omitted features inherit the upstream default, which can move between
+# releases. `ghostty +show-config --default` prints the current one.
 #
-# sudo: wraps sudo as `sudo --preserve-env=TERMINFO`. Ghostty sets TERMINFO to
-#   the app bundle (/Applications/Ghostty.app/Contents/Resources/terminfo) and
-#   xterm-ghostty exists nowhere else on this box — `env -u TERMINFO infocmp -x
-#   xterm-ghostty` fails — so without this, sudoers' env_reset drops TERMINFO and
+# sudo: wraps sudo as `sudo --preserve-env=TERMINFO`. xterm-ghostty exists only
+#   inside the app bundle, so without this, sudoers' env_reset drops TERMINFO and
 #   `sudo vim`/`sudo -s` land on an unknown terminal type. Keep it on.
 # ssh-env: adds `-o SetEnv COLORTERM=truecolor` and
 #   `-o SendEnv TERM_PROGRAM TERM_PROGRAM_VERSION` (remote sshd must AcceptEnv them).
-# ssh-terminfo: pushes `infocmp -0 -x xterm-ghostty` through a ControlMaster
-#   connection and runs `tic -x -` on the remote, so TERM stays xterm-ghostty
-#   instead of degrading to xterm-256color. Needs tic on the remote; on failure
-#   it warns and falls back. Successes are cached — `ghostty +ssh-cache` lists,
-#   `--remove=host` forces a reinstall.
+# ssh-terminfo: pushes `infocmp -0 -x xterm-ghostty` over the ControlMaster and
+#   runs `tic -x -` remotely, so TERM stays xterm-ghostty instead of degrading to
+#   xterm-256color. Needs remote tic; warns and falls back otherwise. Successes
+#   are cached: `ghostty +ssh-cache` lists, `--remove=host` forces a reinstall.
 #
-# Both ssh features work by defining an `ssh` zsh function, so they cover
-# interactive `ssh` only — not scp/rsync/git-over-ssh or ssh from scripts.
-# `command ssh <host>` bypasses the wrapper; useful for `idc`, whose custom
-# appliance CLI is not a POSIX shell and will choke on the tic probe.
+# Both ssh features are a zsh `ssh` function, so they cover interactive ssh only
+# — not scp/rsync/git-over-ssh or ssh from scripts. `command ssh <host>` bypasses
+# it; needed for `idc`, whose appliance CLI chokes on the tic probe.
 shell-integration-features = no-cursor,sudo,title,ssh-env,ssh-terminfo,path
 mouse-hide-while-typing = true
 macos-option-as-alt = left
@@ -46,36 +40,31 @@ background-blur = 20
 desktop-notifications = true
 progress-style = true
 link-previews = true
-# Kills the traffic lights on its own (since 1.2.0); no titlebar-style needed.
+# Removes the traffic lights by itself (since 1.2.0) — no titlebar-style needed.
 macos-window-buttons = hidden
-# macos-titlebar-style is deliberately unset -> upstream default "transparent".
-# `tabs` paints the titlebar from the terminal background color, which breaks
-# down once background-opacity < 1 (see the override docs below).
+# macos-titlebar-style left unset (default "transparent"): `tabs` paints the
+# titlebar from the terminal background, which goes see-through at opacity < 1.
 window-padding-x = 10
 window-padding-y = 8
 scrollback-limit = 25000000
 
 
 # Machine-local overrides. To change font/theme/etc on THIS machine without
-# committing, create .chezmoidata/ghostty-local.toml (gitignored — see the repo
-# .gitignore) with a [ghostty.local] table. chezmoi merges it into template data
-# and renders the values inline BELOW at apply time; nothing is placed on the
-# machine, and ~/.config/ghostty/config stays the single source. Example:
+# committing, put a [ghostty.local] table in .chezmoidata/ghostty-local.toml
+# (gitignored); chezmoi merges it into template data and renders it inline BELOW
+# at apply time, so ~/.config/ghostty/config stays the single source. Example:
 #
 #   [ghostty.local]
 #   font-size = 17
 #   theme = "Dracula"
 #   font-family = ["Monaspace Neon", "Symbols Nerd Font Mono"]
 #
-# Scalars override (ghostty last-value-wins). List options (font-family, keybind,
-# palette, …) get a reset line emitted first, because ghostty appends to list
-# options rather than replacing — without the reset, `font-family =
-# "JetBrainsMono Nerd Font"` lands *third* in the fallback chain behind Hack and
-# never renders a glyph. The reset fires both for TOML arrays and for a bare
-# scalar naming a list option (see $lists below), so either spelling works; a
-# multi-value override still needs the array form. Note that a font-family
-# override must re-list Symbols Nerd Font Mono or you lose icon glyphs. Promote a
-# value to the tracked default by editing the plain lines above and committing.
+# Scalars override (ghostty is last-value-wins). List options ($lists below)
+# append rather than replace, so they get a `<key> =` reset emitted first —
+# without it a font-family override lands *behind* the defaults above and never
+# renders. Array and bare-scalar spellings both work, but the reset clears the
+# whole list, so a font-family override must re-list Symbols Nerd Font Mono or
+# you lose icon glyphs. Promote a value to the default by editing the lines above.
 {{- /* Ghostty options that append rather than replace; `<key> =` clears them. */ -}}
 {{- $lists := dict "font-family" true "font-family-bold" true "font-family-italic" true "font-family-bold-italic" true "keybind" true "palette" true "font-feature" true "font-variation" true "config-file" true }}
 {{- $local := dig "ghostty" "local" (dict) . }}

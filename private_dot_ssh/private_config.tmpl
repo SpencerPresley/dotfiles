@@ -53,12 +53,12 @@ Host crunchbox-lab
   ServerAliveInterval 60
   ServerAliveCountMax 3
 
-# --- crunch-admin (Tailscale-only Ubuntu box, tail11d977 tailnet) ---
+# --- crunch-admin (Tailscale-only Ubuntu box, tail68f662 tailnet) ---
 # No public inbound — reachable only while Tailscale is connected on the
-# profile that has it (gmail identity as of 2026-07). Shared account: no
-# personal/sensitive files on-box. MagicDNS: crunch-admin.tail11d977.ts.net.
+# profile that has it (tagged device, re-added 2026-09). Shared account: no
+# personal/sensitive files on-box. MagicDNS: crunch-admin.tail68f662.ts.net.
 Host crunch-admin
-  HostName crunch-admin.tail11d977.ts.net
+  HostName 100.99.174.12
   User crunch-admin
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes

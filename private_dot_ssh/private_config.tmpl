@@ -110,8 +110,9 @@ Host atlascyber-backend
 # GovCloud EC2 i-0d74668f6786f666e, Amazon Linux 2023. Public IP is not a
 # secret (EC2 public IPv4), so it's inline rather than in 1Password. Sibling
 # of atlascyber-reverse-proxy; carries the NEUCIC backend's reverse tunnels.
+# Elastic IP since 2026-10-15 (the auto-assigned 182.30.168.128 is retired).
 Host neucic-reverse-proxy
-  HostName 182.30.168.128
+  HostName 16.65.82.186
   User ec2-user
   IdentityFile ~/.ssh/id_ed25519.pub
   IdentitiesOnly yes

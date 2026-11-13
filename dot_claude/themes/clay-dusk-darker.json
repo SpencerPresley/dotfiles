@@ -3,7 +3,7 @@
   "base": "dark",
   "overrides": {
     "text": "#D4CEC0",
-    "inverseText": "#1E1C19",
+    "inverseText": "#1A1815",
     "permission": "#8DBEF3",
     "permissionShimmer": "#B5D4F7",
     "suggestion": "#8DBEF3",
@@ -21,6 +21,6 @@
     "userMessageBackground": "#2E2A25",
     "userMessageBackgroundHover": "#3A352F",
     "selectionBg": "#3F3B34",
-    "composerSidebarBackground": "#24221E"
+    "composerSidebarBackground": "#201E1A"
   }
 }

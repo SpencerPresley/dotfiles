@@ -1,0 +1,26 @@
+{
+  "name": "Clay Dusk Darker",
+  "base": "dark",
+  "overrides": {
+    "text": "#E8E2D4",
+    "inverseText": "#1E1C19",
+    "permission": "#8DBEF3",
+    "permissionShimmer": "#B5D4F7",
+    "suggestion": "#8DBEF3",
+    "remember": "#CFA5F3",
+    "briefLabelYou": "#8DBEF3",
+    "inactive": "#A39C8B",
+    "inactiveShimmer": "#C4BDAC",
+    "subtle": "#736C5E",
+    "promptBorder": "#8A8273",
+    "promptBorderShimmer": "#A8A090",
+    "success": "#A2C06A",
+    "error": "#F2766B",
+    "warning": "#F3C058",
+    "warningShimmer": "#F8D58E",
+    "userMessageBackground": "#2E2A25",
+    "userMessageBackgroundHover": "#3A352F",
+    "selectionBg": "#3F3B34",
+    "composerSidebarBackground": "#24221E"
+  }
+}

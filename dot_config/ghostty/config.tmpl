@@ -47,6 +47,22 @@ macos-window-buttons = hidden
 window-padding-x = 10
 window-padding-y = 8
 scrollback-limit = 25000000
+# Readability. faint-opacity: SGR-2 dim text (e.g. the Claude Code statusline's
+# \033[2m separators) draws at this alpha; the 0.5 default washes out on
+# dark backgrounds. minimum-contrast: WCAG ratio floor per cell, but a colour
+# under it is swapped for pure #FFFFFF/#000000, not nudged — so themes here
+# keep every text colour above it (see themes/Oxidized header).
+faint-opacity = 0.75
+minimum-contrast = 3
+# Same glyph weight as the macOS `native` default, minus the dark fringes
+# linear-space blending removes (red-on-green etc.). Plain `linear` thins dark
+# text and thickens light text, stacking with font-thicken on dark themes.
+# window-colorspace stays at its srgb default: theme hexes are authored as sRGB,
+# and display-p3 would read them as P3 coordinates (oversaturated on P3 panels).
+alpha-blending = linear-corrected
+# Restore windows, tabs, splits (and, via shell integration, each pane's cwd)
+# on every launch. Processes aren't restored: re-run `claude -c` per pane.
+window-save-state = always
 
 
 # Machine-local overrides. To change font/theme/etc on THIS machine without

@@ -1,0 +1,29 @@
+# Clay Dusk — the in-between: Clay's hues on a warm charcoal, not near-black.
+# Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Clay Dusk"
+#
+# Foreground is cream (#E0DBCD, 11.2:1), not white, and every palette text
+# colour clears 4.7:1 so minimum-contrast never swaps in pure #FFFFFF.
+
+background = #262420
+foreground = #E0DBCD
+cursor-color = #D97757
+cursor-text = #262420
+selection-background = #45413A
+selection-foreground = #F0ECE2
+
+palette = 0=#34312B
+palette = 1=#E07A5A
+palette = 2=#9DB580
+palette = 3=#D9A048
+palette = 4=#82AEDB
+palette = 5=#B595D8
+palette = 6=#6BB8B3
+palette = 7=#CFCABD
+palette = 8=#938E81
+palette = 9=#EB9172
+palette = 10=#B2C996
+palette = 11=#E8B868
+palette = 12=#9DC2E6
+palette = 13=#C8AEE6
+palette = 14=#8BCBC6
+palette = 15=#EDE9DF

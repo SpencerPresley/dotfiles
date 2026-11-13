@@ -1,0 +1,32 @@
+# Clay — warm paper light theme (Claude-inspired palette).
+# Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Clay"
+#
+# Every text colour clears 4.1:1 on the #FAF9F5 background so Ghostty's
+# minimum-contrast never swaps one for pure black. Changes from the source
+# palette: 0/7 follow the ANSI convention (0 = darkest, 7 = mid grey) instead
+# of 0 = background, which made ANSI-black text invisible; the light accents
+# (4, 8-14) are darkened along the same hue to clear contrast.
+
+background = #FAF9F5
+foreground = #141413
+cursor-color = #D97757
+cursor-text = #FAF9F5
+selection-background = #E8E6DC
+selection-foreground = #141413
+
+palette = 0=#141413
+palette = 1=#B5512F
+palette = 2=#5C7A3E
+palette = 3=#965E06
+palette = 4=#3F72A8
+palette = 5=#7B5BA6
+palette = 6=#2A7A7A
+palette = 7=#5E5D59
+palette = 8=#7A7972
+palette = 9=#A8482A
+palette = 10=#4F6B32
+palette = 11=#855404
+palette = 12=#356593
+palette = 13=#6E4F9A
+palette = 14=#226C6C
+palette = 15=#3D3D3C

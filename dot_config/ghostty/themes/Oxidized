@@ -1,5 +1,13 @@
-# Oxidized — oxidized metal, brutalist copper.
+# Oxidized — oxidized metal, brutalist copper, verdigris accents.
 # Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Oxidized"
+#
+# Contrast rule: every text colour (palette 1-15, foreground) clears 4.4:1
+# against the background. Ghostty's minimum-contrast doesn't nudge a colour
+# that falls short — its shader swaps it for pure #FFFFFF (contrasted_color in
+# src/renderer/shaders/shaders.metal). The first cut had palette 1/2/4/8/12
+# under 3:1, so with minimum-contrast = 3 anything printed in ANSI green or
+# red (statusline %, git branch, diffs) rendered stark white.
+# palette 0 stays near the background: it's a fill colour, not a text colour.
 #
 # Source spec also defined non-Ghostty keys, kept here for reference:
 #   accent=#c07040
@@ -8,25 +16,27 @@
 #   omp_tf_fg=#daa070  omp_sysinfo_fg=#d08858
 
 background = #0f0a06
-foreground = #d0b090
+foreground = #d6bc9c
 cursor-color = #c07040
 cursor-text = #000000
-selection-background = #281808
-selection-foreground = #e0c8a8
+selection-background = #3a2614
+selection-foreground = #f0dcc0
 
-palette = 0=#0f0a06
-palette = 1=#5a3018
-palette = 2=#7a4828
-palette = 3=#986038
-palette = 4=#482810
+# normal: rust, verdigris, brass, oxidized steel, copper, patina, tarnish
+palette = 0=#1c140c
+palette = 1=#c4583a
+palette = 2=#7fa585
+palette = 3=#c8964a
+palette = 4=#7690a8
 palette = 5=#c07040
-palette = 6=#a06030
+palette = 6=#5fa39a
 palette = 7=#ccb090
-palette = 8=#1a1208
-palette = 9=#8a5028
-palette = 10=#a86838
-palette = 11=#c88850
-palette = 12=#7a4a28
+# bright
+palette = 8=#8a745c
+palette = 9=#dc7252
+palette = 10=#9cbf9e
+palette = 11=#e0b060
+palette = 12=#94acc2
 palette = 13=#d89060
-palette = 14=#b87840
+palette = 14=#80c0b4
 palette = 15=#e8d8c0

@@ -9,6 +9,7 @@ set -euo pipefail
 # config.tmpl hash:   {{ include "dot_config/ghostty/config.tmpl" | sha256sum }}
 # local override hash: {{ dig "ghostty" "local" (dict) . | toJson | sha256sum }}
 # generator hash:     {{ include "private_dot_local/bin/executable_ghostty-yazi-flavor" | sha256sum }}
+# Oxidized hash:     {{ include "dot_config/ghostty/themes/Oxidized" | sha256sum }}
 
 echo "==> Syncing yazi flavor from Ghostty theme..."
 "$HOME/.local/bin/ghostty-yazi-flavor"

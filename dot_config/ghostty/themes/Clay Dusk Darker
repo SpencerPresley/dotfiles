@@ -1,0 +1,31 @@
+# Clay Dusk Darker — Clay Dusk with the washed-out pastels pulled back.
+# Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Clay Dusk Darker"
+#
+# Keeps the lifted warm-grey background (the matte, low-halation look) but
+# darker (#1E1C19 vs #262420), brighter cream text (13.2:1 vs 11.2:1), and
+# higher-chroma accents. Every palette text colour clears 5.4:1 so
+# minimum-contrast never swaps in pure #FFFFFF.
+
+cursor-color = #D97757
+cursor-text = #1E1C19
+selection-background = #3F3B34
+selection-foreground = #F2EDE2
+
+background = #1E1C19
+foreground = #E8E2D4
+palette = 0=#2E2B26
+palette = 1=#EA6F48
+palette = 2=#A2C06A
+palette = 3=#E8A435
+palette = 4=#6EA8EC
+palette = 5=#B888EA
+palette = 6=#45C0B4
+palette = 7=#D4CEC0
+palette = 8=#98917F
+palette = 9=#F5875E
+palette = 10=#BAD684
+palette = 11=#F3C058
+palette = 12=#8DBEF3
+palette = 13=#CFA5F3
+palette = 14=#6FD3C8
+palette = 15=#F2EDE2

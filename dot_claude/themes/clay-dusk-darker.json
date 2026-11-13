@@ -2,7 +2,7 @@
   "name": "Clay Dusk Darker",
   "base": "dark",
   "overrides": {
-    "text": "#E8E2D4",
+    "text": "#D4CEC0",
     "inverseText": "#1E1C19",
     "permission": "#8DBEF3",
     "permissionShimmer": "#B5D4F7",

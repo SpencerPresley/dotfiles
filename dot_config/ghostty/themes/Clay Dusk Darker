@@ -2,7 +2,8 @@
 # Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Clay Dusk Darker"
 #
 # Keeps the lifted warm-grey background (the matte, low-halation look) but
-# darker (#1E1C19 vs #262420), brighter cream text (13.2:1 vs 11.2:1), and
+# darker (#1E1C19 vs #262420), cream text at 10.8:1 (Ayu Darker's level; the
+# first cut's #E8E2D4 at 13.2:1 glowed on long prose), and
 # higher-chroma accents. Every palette text colour clears 5.4:1 so
 # minimum-contrast never swaps in pure #FFFFFF.
 
@@ -12,7 +13,7 @@ selection-background = #3F3B34
 selection-foreground = #F2EDE2
 
 background = #1E1C19
-foreground = #E8E2D4
+foreground = #D4CEC0
 palette = 0=#2E2B26
 palette = 1=#EA6F48
 palette = 2=#A2C06A

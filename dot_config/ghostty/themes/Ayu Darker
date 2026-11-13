@@ -1,0 +1,32 @@
+# Ayu Darker — port of the Zed extension "Ayu Darker Theme" v1.2.0 by K4YT3X
+# (github.com/k4yt3x/zed-theme-ayu-darker), from its terminal.* colours.
+# Opt in per machine via .chezmoidata/ghostty-local.toml:  theme = "Ayu Darker"
+#
+# Faithful except the bright row: upstream's brights are *darker* than the
+# normals, and black/red/blue/magenta sat under 3:1 on #080808, so Ghostty's
+# minimum-contrast would swap them for pure #FFFFFF (the statusline uses 91/94).
+# Those four are lifted along their hue to >= 4.5:1; the rest are upstream.
+
+background = #080808
+foreground = #bfbdb6
+cursor-color = #5ac1fe
+cursor-text = #080808
+selection-background = #1d3a50
+selection-foreground = #e6e4dc
+
+palette = 0=#0d1016
+palette = 1=#ef7177
+palette = 2=#aad84c
+palette = 3=#feb454
+palette = 4=#5ac1fe
+palette = 5=#39bae5
+palette = 6=#95e5cb
+palette = 7=#bfbdb6
+palette = 8=#7a7a77
+palette = 9=#c4565d
+palette = 10=#567627
+palette = 11=#92582b
+palette = 12=#3d86bd
+palette = 13=#3a85ab
+palette = 14=#4c806f
+palette = 15=#bfbdb6

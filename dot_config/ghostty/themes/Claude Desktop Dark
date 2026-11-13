@@ -1,0 +1,34 @@
+# Claude Desktop Dark — the Claude desktop app's dark theme, sampled from
+# screenshots (Nov 2026): neutral #191919 page, #252525 message bubbles,
+# #A4A4A4 muted text. Opt in via .chezmoidata/ghostty-local.toml:
+#   theme = "Claude Desktop Dark"
+#
+# The app draws prose in pure #FFFFFF (17.6:1) but in a thin proportional
+# serif, so little of each glyph is lit. A terminal draws heavier monospace
+# strokes (more so under font-thicken), so the foreground here is stepped down
+# to #DADAD8 (~12.6:1). Pair with font-thicken = false for the app's thin look.
+# Accents are Clay Dusk Darker's, all >= 5:1 on this background.
+
+background = #191919
+foreground = #DADAD8
+cursor-color = #D97757
+cursor-text = #191919
+selection-background = #3A3A3A
+selection-foreground = #F2F2F0
+
+palette = 0=#2A2A2A
+palette = 1=#EA6F48
+palette = 2=#A2C06A
+palette = 3=#E8A435
+palette = 4=#6EA8EC
+palette = 5=#B888EA
+palette = 6=#45C0B4
+palette = 7=#D4D4D2
+palette = 8=#8A8A88
+palette = 9=#F5875E
+palette = 10=#BAD684
+palette = 11=#F3C058
+palette = 12=#8DBEF3
+palette = 13=#CFA5F3
+palette = 14=#6FD3C8
+palette = 15=#F2F2F0
